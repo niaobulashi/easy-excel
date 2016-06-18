@@ -57,6 +57,7 @@ org.easy.excel.test.ImportTest
 
 1、导入
 
+```
 public void testImport()throws Exception{
 	InputStream fis = new FileInputStream(path);
 	ExcelImportResult result = context.readExcel(excelId, fis);
@@ -72,7 +73,9 @@ public void testImport()throws Exception{
 	}
 }
 
+```
 2、导出
+```
 public void testExportSimple()throws Exception{
 	OutputStream ops = new FileOutputStream(path);
 	Workbook workbook = context.createExcel(excelId,getStudents());
@@ -80,3 +83,4 @@ public void testExportSimple()throws Exception{
 	ops.close();
 	workbook.close();
 }
+```
