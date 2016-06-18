@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.easy.excel.ExcelContext;
+import org.easy.excel.test.model.BookModel;
 import org.easy.excel.test.model.StudentModel;
 import org.easy.excel.vo.ExcelImportResult;
 import org.junit.Test;
@@ -36,6 +37,11 @@ public class ImportTest {
 		List<StudentModel> stus = result.getListBean();
 		for(StudentModel stu:stus){
 			System.out.println(stu);
+			BookModel book = stu.getBook();
+			System.out.println(book);
+			if(book!=null){
+				System.out.println(book.getAuthor());
+			}
 		}
 		
 		//这种方式和上面的没有任何区别,底层方法默认标题索引为0
