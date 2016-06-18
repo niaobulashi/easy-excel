@@ -102,7 +102,7 @@ public class ExportTest {
 		specifyFields.add("id");
 		specifyFields.add("name");
 		specifyFields.add("age");
-		List<StudentModel> stus = getStudents();
+		final List<StudentModel> stus = getStudents();
 		Workbook workbook = context.createExcel(excelId,stus,new ExcelHeader() {
 			
 			@Override
