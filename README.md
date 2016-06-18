@@ -15,10 +15,13 @@ org.easy.excel.test.ImportTest
 
 支持,复杂对象导航,支持自定义(单元格宽度)
 标题样式(背景色,对齐方式,字体颜色)
+
 导出测试使用时,运行org.easy.excel.test.ExportTest类的测试方法,观察具体生成的excel文件
+
 导入测试使用时,运行org.easy.excel.test.ImportTest,观察org.easy.excel.vo.ExcelImportResult
 
 下面展示配置文件
+
 <?xml version="1.0" encoding="UTF-8"?>
 <excels>
 	<!-- excel标签参看:ExcelDefinition,Field标签参看:FieldValue -->
@@ -47,3 +50,4 @@ org.easy.excel.test.ImportTest
 
 关于excel配置属性说明：参看org.easy.excel.vo.ExcelDefinition
 关于field配置属性说明参看:org.easy.excel.vo.FieldValue
+
