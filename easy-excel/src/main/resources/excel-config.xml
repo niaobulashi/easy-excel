@@ -3,7 +3,7 @@
 	<!-- excel标签参看:ExcelDefinition,Field标签参看:FieldValue -->
 	
 	<!-- 测试使用 ,学生类-->
-	<excel id="student" class="org.easy.excel.test.model.StudentModel" enableStyle="true">
+	<excel id="student" class="org.easy.excel.test.model.StudentModel" sheetname="测试学生列表" enableStyle="true">
 		<field name="id" align="center" titleBgColor="dark_blue"
 		columnWidth="3000" titleFountColor="white" title="ID"/>
 		<field name="name" title="学生姓名" align="right"/>
