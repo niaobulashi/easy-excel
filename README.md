@@ -66,6 +66,9 @@ org.easy.excel.test.ImportTest
 
 关于使用：这里附上部分代码
 
+(开发者只需要关注一个类即可org.easy.excel.ExcelContext),这个类暴露了对外的导入导出所有功能,通常在实际项目里,把它配置到spring容器中初始化一个就可以了
+
+
 1、导入
 
 ```
