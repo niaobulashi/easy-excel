@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excels>
+	<!-- excel标签参看:ExcelDefinition,Field标签参看:FieldValue -->
+	
+	<!-- 测试使用 ,学生类-->
+	<excel id="student" class="org.easy.excel.test.model.StudentModel" enableStyle="true">
+		<field name="id" align="center" titleBgColor="dark_blue"
+		columnWidth="3000" titleFountColor="white" title="ID"/>
+		<field name="name" title="学生姓名" align="right"/>
+		<field name="age" title="年龄" align="center" titleFountColor="red" titleBgColor="dark_blue" isNull="false" regex="^[1-9]\d*$" regexErrMsg="必须是数字"/>
+		<field name="studentNo" title="学号" titleFountColor="blue" isNull="false" />
+		<field name="createTime" columnWidth="4000" title="创建时间" pattern="yyyy-MM-dd"/>
+		<field name="status" title="状态" titleBgColor="green" format="1:正常,0:禁用,-1:无效" />
+		<!-- 创建人,可能需要查询数据库校验,这里使用自定义解析器 -->
+		<field name="createUser" title="创建人" 
+		resolveFieldValueConverterName="org.easy.excel.test.converter.CreateUserFieldValueConverter"/>
+		
+		<!-- 复杂对象 -->
+		<field name="book.bookName" title="图书名称" columnWidth="6000"/>
+		<field name="book.author.authorName" title="作者名称"/>
+	</excel>
+	
+</excels>
