@@ -52,7 +52,7 @@ public class ExportTest {
 	@Test
 	public void testExportCustomHeader()throws Exception{
 		OutputStream ops = new FileOutputStream(path);
-		List<StudentModel> stus = getStudents();
+		final List<StudentModel> stus = getStudents();
 		Workbook workbook = context.createExcel(excelId,stus,new ExcelHeader() {
 			@Override
 			public void buildHeader(Sheet sheet, ExcelDefinition excelDefinition, List<?> beans) {
