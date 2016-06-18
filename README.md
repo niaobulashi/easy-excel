@@ -9,7 +9,7 @@ xmlbeans
 spring-core
 spring-beans
 
-具体使用,参考
+如何使用？,参考
 org.easy.excel.test.ExportTest
 org.easy.excel.test.ImportTest
 
@@ -53,3 +53,30 @@ org.easy.excel.test.ImportTest
 
 关于field配置属性说明参看:org.easy.excel.vo.FieldValue
 
+关于使用：这里附上部分代码
+
+1、导入
+
+public void testImport()throws Exception{
+	InputStream fis = new FileInputStream(path);
+	ExcelImportResult result = context.readExcel(excelId, fis);
+	System.out.println(result.getHeader());
+	List<StudentModel> stus = result.getListBean();
+	for(StudentModel stu:stus){
+		System.out.println(stu);
+		BookModel book = stu.getBook();
+		System.out.println(book);
+		if(book!=null){
+			System.out.println(book.getAuthor());
+		}
+	}
+}
+
+2、导出
+public void testExportSimple()throws Exception{
+	OutputStream ops = new FileOutputStream(path);
+	Workbook workbook = context.createExcel(excelId,getStudents());
+	workbook.write(ops);
+	ops.close();
+	workbook.close();
+}
