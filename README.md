@@ -1,16 +1,26 @@
  **#easy-excel** 
- **jar包依赖** 
+ **一、jar包依赖** 
 Apache commons 
+
 beanutils
+
 collections
+
 lang
+
 poi
+
 xmlbeans
+
 spring-core
+
 spring-beans
 
+
  **如何使用？,参考** 
+
 org.easy.excel.test.ExportTest
+
 org.easy.excel.test.ImportTest
 
 支持,复杂对象导航,支持自定义(单元格宽度)
