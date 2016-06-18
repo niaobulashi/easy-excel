@@ -49,5 +49,6 @@ org.easy.excel.test.ImportTest
 上述配置,目前以包含所有支持的可配置属性。
 
 关于excel配置属性说明：参看org.easy.excel.vo.ExcelDefinition
+
 关于field配置属性说明参看:org.easy.excel.vo.FieldValue
 
