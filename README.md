@@ -5,21 +5,7 @@ http://my.oschina.net/lis1314/blog/693989
 
 
  **一、jar包依赖** 
-Apache commons 
-
-beanutils
-
-collections
-
-lang
-
-poi
-
-xmlbeans
-
-spring-core
-
-spring-beans
+![输入图片说明](http://git.oschina.net/uploads/images/2016/0619/175936_b9d561e5_690778.png "在这里输入图片标题")
 
 
  **二、如何使用？,参考** 
