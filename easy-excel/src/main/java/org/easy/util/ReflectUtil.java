@@ -1,7 +1,6 @@
 package org.easy.util;
 
 
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -19,9 +18,11 @@ import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.CharSetUtils;
-import org.apache.commons.lang.Validate;
 import org.springframework.beans.BeanUtils;
+import org.springframework.util.Assert;
+import org.springframework.util.ReflectionUtils;
+import org.springframework.util.StringUtils;
+import org.springframework.util.TypeUtils;
 
 
 /**
@@ -29,16 +30,6 @@ import org.springframework.beans.BeanUtils;
  * @author lisuo
  */
 public abstract class ReflectUtil {
-	
-	private static final Set<String> PRIMITIVE_NUMBER_MAP = new HashSet<>();
-	static{
-		PRIMITIVE_NUMBER_MAP.add("double");
-		PRIMITIVE_NUMBER_MAP.add("float");
-		PRIMITIVE_NUMBER_MAP.add("int");
-		PRIMITIVE_NUMBER_MAP.add("short");
-		PRIMITIVE_NUMBER_MAP.add("long");
-		PRIMITIVE_NUMBER_MAP.add("byte");
-	}
 	
 	/**
 	 * 获取常量值
@@ -62,6 +53,25 @@ public abstract class ReflectUtil {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * 为String类型的属性做trim
+	 * @param model 去除空格的模型(实体类)
+	 * @param propNames 去除属性的名称,只有String类型生效
+	 */
+	public static void trimFields(Object model, String... propNames){
+		Assert.notEmpty(propNames, "请指定要去前后空格的属性名");
+		for(String propName : propNames){
+			Object val = ReflectUtil.getProperty(model, propName);
+			if(val instanceof String){
+				if(null!=val){
+					String valStr = (String)val;
+					valStr = valStr.trim();
+					setProperty(model, propName, valStr);
+				}
+			}
+		}
 	}
 	
 	/**
@@ -114,7 +124,6 @@ public abstract class ReflectUtil {
 	/**
 	 * 通过反射, 获得 Class 定义中声明的父类的泛型参数类型
 	 * 如: public EmployeeDao extends BaseDao<Employee, String>
-	 * 返回 Employee.class
 	 * @param <T>
 	 * @param clazz
 	 * @return
@@ -125,35 +134,30 @@ public abstract class ReflectUtil {
 	}
 	
 	/**
-	 * 拷贝非空属性
+	 * 拷贝属性
 	 * @param source
 	 * @param target
 	 * @param ignorProps 忽略的属性
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static void copyProps(Object source, Object target, String...ignorProps) {
+	public static void copyProps(Object source, Object target, String...ignoreProps) {
 		if(source instanceof Map){
-			try {
-				Map sourceMap = (Map)source;
-				Set<String> ignorPropsSet = new HashSet<String>();
-				if(null!=ignorProps){
-					for(String prop : ignorProps){
-						ignorPropsSet.add(prop);
-					}
+			Map sourceMap = (Map)source;
+			Set<String> ignorPropsSet = new HashSet<String>();
+			if(ArrayUtils.isNotEmpty(ignoreProps)){
+				for(String prop : ignoreProps){
+					ignorPropsSet.add(prop);
 				}
-				for(Object key : sourceMap.keySet()){
-					if(null==key || ignorPropsSet.contains(key)){
-						continue;
-					}else{
-						Object value = sourceMap.get(key);
-						if(PropertyUtils.isWriteable(target, key.toString())){
-							PropertyUtils.setProperty(target, key.toString(), value);
-						}
-					}
-				}
-			} catch (Exception e) {
-				throw new RuntimeException(e);
 			}
+			Set<Map.Entry<Object, Object>> entrySet = sourceMap.entrySet();
+			for(Map.Entry<Object, Object> e:entrySet){
+				if(ignorPropsSet.isEmpty()){
+					setProperty(target, e.getKey().toString(), e.getValue());
+				}else if(!ignorPropsSet.contains(e.getKey())){
+					setProperty(target, e.getKey().toString(), e.getValue());
+				}
+			}
+			
 		}else if(source instanceof List){
 			List sourceList = (List)source;
 			if(target instanceof List){
@@ -164,10 +168,32 @@ public abstract class ReflectUtil {
 			}
 			
 		}else{
-			BeanUtils.copyProperties(source, target, ignorProps);
+			BeanUtils.copyProperties(source, target, ignoreProps);
 		}
 	}
 	
+	/**
+	 * 拷贝非空属性,指定copy的属性
+	 * @param source 资源
+	 * @param target 目标
+	 * @param incProps 包含的属性
+	 */
+	public static void copyPropsInc(Object source, Object target, String...incProps) {
+		if(ArrayUtils.isNotEmpty(incProps)){
+			Set<String> incPropsSet = new HashSet<String>(incProps.length);
+			for(String prop : incProps){
+				incPropsSet.add(prop);
+			}
+			List<String> fieldNames = getFieldNames(source.getClass());
+			for(String fieldName : fieldNames){
+				if(!incPropsSet.contains(fieldName)){
+					continue;
+				}
+				Object value = getProperty(source, fieldName);
+				setProperty(target, fieldName, value);
+			}
+		}
+	}
 	
 	/**
 	 * java bean转Map
@@ -176,27 +202,19 @@ public abstract class ReflectUtil {
 	 * @return
 	 */
 	public static Map<String,Object> beanToMap(Object bean, String...propNames) {
-		Validate.notNull(bean, "Bean is null");
-		Validate.notEmpty(propNames,"PropNames is null");
 		Map<String,Object> rtn = new HashMap<String,Object>();
 		if(ArrayUtils.isEmpty(propNames) || "*".equals(propNames[0])){
-			PropertyDescriptor[] propDescs = PropertyUtils.getPropertyDescriptors(bean);
-			for(PropertyDescriptor propDesc : propDescs){
-				String propName = propDesc.getName();
-				Object propValue = null;
-				propValue = getProperty(bean, propName);
-				rtn.put(propName, propValue);
+			List<String> fieldNames = getFieldNames(bean.getClass());
+			for (String fieldName: fieldNames) {
+				Object value = getProperty(bean, fieldName);
+				rtn.put(fieldName, value);
 			}
 		}else{
 			for(String propName: propNames){
-				Object propValue = null;
-				if(PropertyUtils.isReadable(bean, propName)){
-					propValue = getProperty(bean, propName);
-				}
-				rtn.put(propName, propValue);
+				Object value = getProperty(bean, propName);
+				rtn.put(propName, value);
 			}
 		}
-		rtn.remove("class");
 		return rtn;
 	}
 	
@@ -208,12 +226,8 @@ public abstract class ReflectUtil {
 	 */
 	public static <T> T mapToBean(Map<String,?> map,Class<T> clazz){
 		T bean = newInstance(clazz);
-		try {
-			for(Entry<String, ?> me:map.entrySet()){
-				setProperty(bean, me.getKey(), me.getValue(), true);
-			}
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		for(Entry<String, ?> me:map.entrySet()){
+			setProperty(bean, me.getKey(), me.getValue(), true);
 		}
 		return bean;
 	}
@@ -275,19 +289,7 @@ public abstract class ReflectUtil {
 	 * @throws Exception
 	 */
 	public static Field getField(Class<?> clazz,String name){
-		Field field = null;
-		while(clazz!=Object.class){
-			try {
-				field = clazz.getDeclaredField(name);
-			} catch (NoSuchFieldException e) {
-			} catch (SecurityException e) {
-			}
-			if(field!=null){
-				return field;
-			}
-			clazz = clazz.getSuperclass();
-		}
-		return field;
+		return ReflectionUtils.findField(clazz, name);
 		
 	}
 	
@@ -331,22 +333,14 @@ public abstract class ReflectUtil {
 				Class<?> type = getPropertyType(bean, name);
 				if (type != null) {
 					if (!value.getClass().equals(type)) {
-						//如果把string转换成日期尝试先把string转换long,在把long转换为日期
-						if (Date.class.isAssignableFrom(type) && value instanceof String) {
+						if (TypeUtils.isAssignable(Date.class, type) && value instanceof String) {
 							try {
 								value = new Date(Long.parseLong((String) value));
 							} catch (NumberFormatException ignore) {}
 						} else {
 							//如果把一个字符串转换成数值,去除数值的,
-							if(Number.class.isAssignableFrom(type)){
-								value = CharSetUtils.delete(value.toString(),",");
-							}else {
-								//是基本数据类型
-								if(type.isPrimitive()){
-									if(PRIMITIVE_NUMBER_MAP.contains(type.getName())){
-										value = CharSetUtils.delete(value.toString(),",");
-									}
-								}
+							if(TypeUtils.isAssignable(Number.class, type)){
+								value = StringUtils.deleteAny(value.toString(), ",");
 							}
 							value = ConvertUtils.convert(value, type);
 						}
@@ -421,7 +415,7 @@ public abstract class ReflectUtil {
 				Object val = PropertyUtils.getProperty(bean, nestedName.toString());
 				if (val == null) {
 					PropertyUtils.setProperty(bean, nestedName.toString(),
-							PropertyUtils.getPropertyType(bean, nestedName.toString()).newInstance());
+					PropertyUtils.getPropertyType(bean, nestedName.toString()).newInstance());
 				}
 			}
 		} catch (Exception e) {
