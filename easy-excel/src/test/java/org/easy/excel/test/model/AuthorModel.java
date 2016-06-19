@@ -7,6 +7,7 @@ package org.easy.excel.test.model;
  */
 public class AuthorModel {
 	
+	/** 作者姓名 */
 	private String authorName;
 
 	public String getAuthorName() {
