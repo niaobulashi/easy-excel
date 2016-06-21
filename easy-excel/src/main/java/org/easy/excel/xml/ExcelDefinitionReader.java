@@ -213,12 +213,14 @@ public class ExcelDefinitionReader {
 							+ " ] 的 titleFountColor 属性不能为 [ "+titleFountColor+" ],具体看[org.apache.poi.ss.usermodel.IndexedColors]支持的颜色");
 						}
 					}
-					
-					
-					
-					String resolveFieldValueConverterName = fieldEle.getAttribute("resolveFieldValueConverterName");
+					//cell 样式是否与标题样式一致
+					String uniformStyle = fieldEle.getAttribute("uniformStyle");
+					if(StringUtils.isNotBlank(uniformStyle)){
+						fieldValue.setUniformStyle(Boolean.parseBoolean(uniformStyle));
+					}
 					
 					//解析自定义转换器
+					String resolveFieldValueConverterName = fieldEle.getAttribute("resolveFieldValueConverterName");
 					if(StringUtils.isNotBlank(resolveFieldValueConverterName)){
 						fieldValue.setResolveFieldValueConverterName(resolveFieldValueConverterName);
 //						try {

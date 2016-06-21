@@ -48,6 +48,7 @@ public class ExcelImport extends AbstractExcelResolver{
 	protected ExcelImportResult doReadExcel(ExcelDefinition excelDefinition,int titleIndex,InputStream excelStream) throws Exception {
 		Workbook workbook = WorkbookFactory.create(excelStream);
 		ExcelImportResult result = new ExcelImportResult();
+		//只读取第一个sheet
 		Sheet sheet = workbook.getSheetAt(0);
 		//标题之前的数据处理
 		List<List<Object>> header = readHeader(excelDefinition, sheet,titleIndex);

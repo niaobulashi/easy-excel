@@ -37,6 +37,9 @@ public class FieldValue {
 	private Short titleBgColor;
 	/** 标题cell字体色:看org.apache.poi.ss.usermodel.IndexedColors 可用颜色*/
 	private Short titleFountColor;
+	/** cell 样式是否与标题样式一致 */
+	private boolean uniformStyle = false;
+	
 	
 	
 	
@@ -144,6 +147,14 @@ public class FieldValue {
 
 	public void setTitleFountColor(Short titleFountColor) {
 		this.titleFountColor = titleFountColor;
+	}
+
+	public boolean isUniformStyle() {
+		return uniformStyle;
+	}
+
+	public void setUniformStyle(boolean uniformStyle) {
+		this.uniformStyle = uniformStyle;
 	}
 	
 	

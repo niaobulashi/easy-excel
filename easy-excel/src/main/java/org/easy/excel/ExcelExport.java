@@ -2,6 +2,7 @@ package org.easy.excel;
 
 
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import org.easy.excel.vo.ExcelDefinition;
 import org.easy.excel.vo.FieldValue;
 import org.easy.excel.xml.ExcelDefinitionReader;
 import org.easy.util.ReflectUtil;
+import org.springframework.util.TypeUtils;
 
 /**
  * Excel导出实现类
@@ -47,18 +49,41 @@ public class ExcelExport extends AbstractExcelResolver{
 			if(excelDefinition==null){
 				throw new IllegalArgumentException("没有找到 ["+id+"] 的配置信息");
 			}
-			if(excelDefinition.getClazz()==beans.get(0).getClass()){
-				if(CollectionUtils.isNotEmpty(fields)){
-					//导出指定字段的标题不是null,动态创建,Excel定义
-					excelDefinition = dynamicCreateExcelDefinition(excelDefinition,fields);
-				}
-				workbook = doCreateExcel(excelDefinition,beans,header);
-			}else{
-				throw new IllegalArgumentException("传入的参数类型是:"+beans.get(0).getClass().getName()
-						+"但是 配置文件的类型是: "+excelDefinition.getClazz().getName());
+			//实际传入的bean类型
+			Class<?> realClass = beans.get(0).getClass();
+			//传入的类型是excel配置class的类型,或者是它的子类,直接进行生成
+			if(realClass==excelDefinition.getClazz() || TypeUtils.isAssignable(excelDefinition.getClazz(),realClass)){
+				//导出指定字段的标题不是null,动态创建,Excel定义
+				excelDefinition = dynamicCreateExcelDefinition(excelDefinition,fields);
 			}
+			//传入的类型是excel配置class的类型的父类,那么进行向上转型,只获取配置中父类存在的属性
+			else if(TypeUtils.isAssignable(realClass,excelDefinition.getClazz())){
+				excelDefinition = extractSuperClassFields(excelDefinition, fields, realClass);
+			}else{
+				//判断传入的集合与配置文件中的类型拥有共同的父类,如果有则向上转型
+				Object superClass = ReflectUtil.getEqSuperClass(realClass, excelDefinition.getClazz());
+				if(superClass!=Object.class){
+					excelDefinition = extractSuperClassFields(excelDefinition, fields, realClass);
+				}else{
+					throw new IllegalArgumentException("传入的参数类型是:"+beans.get(0).getClass().getName()
+							+"但是 配置文件的类型是: "+excelDefinition.getClazz().getName()+",参数既不是父类,也不是其相同父类下的子类,无法完成转换");
+				}
+				
+			}
+			workbook = doCreateExcel(excelDefinition,beans,header);
 		}
 		return workbook;
+	}
+	
+	//抽取父类拥用的字段,同时从它的基础只上在进行筛选指定的字段
+	private ExcelDefinition extractSuperClassFields(ExcelDefinition excelDefinition,List<String> fields,Class<?> realClass){
+		//抽取出父类所拥有的字段
+		List<String> fieldNames = ReflectUtil.getFieldNames(realClass);
+		excelDefinition = dynamicCreateExcelDefinition(excelDefinition, fieldNames);
+		//抽取指定的字段
+		//导出指定字段的标题不是null,动态创建,Excel定义
+		excelDefinition = dynamicCreateExcelDefinition(excelDefinition,fields);
+		return excelDefinition;
 	}
 	
 	/**
@@ -68,18 +93,21 @@ public class ExcelExport extends AbstractExcelResolver{
 	 * @return
 	 */
 	private ExcelDefinition dynamicCreateExcelDefinition(ExcelDefinition excelDefinition, List<String> fields) {
-		ExcelDefinition newDef = new ExcelDefinition();
-		ReflectUtil.copyProps(excelDefinition, newDef,"fieldValues");
-		List<FieldValue> oldValues = excelDefinition.getFieldValues();
-		List<FieldValue> newValues = new ArrayList<>(oldValues.size());
-		for(FieldValue field:oldValues){
-			String fieldName = field.getName();
-			if(fields.contains(fieldName)){
-				newValues.add(field);
+		if(CollectionUtils.isNotEmpty(fields)){
+			ExcelDefinition newDef = new ExcelDefinition();
+			ReflectUtil.copyProps(excelDefinition, newDef,"fieldValues");
+			List<FieldValue> oldValues = excelDefinition.getFieldValues();
+			List<FieldValue> newValues = new ArrayList<>(oldValues.size());
+			for(FieldValue field:oldValues){
+				String fieldName = field.getName();
+				if(fields.contains(fieldName)){
+					newValues.add(field);
+				}
 			}
+			newDef.setFieldValues(newValues);
+			return newDef;
 		}
-		newDef.setFieldValues(newValues);
-		return newDef;
+		return excelDefinition;
 		
 	}
 
@@ -100,8 +128,8 @@ public class ExcelExport extends AbstractExcelResolver{
 		if(excelDefinition.getDefaultColumnWidth()!=null)
 			sheet.setDefaultColumnWidth(excelDefinition.getDefaultColumnWidth());
 		
-		createTitle(excelDefinition,sheet,workbook);
-		createRows(excelDefinition, sheet, beans,workbook);
+		Row titleRow = createTitle(excelDefinition,sheet,workbook);
+		createRows(excelDefinition, sheet, beans,workbook,titleRow);
 		return workbook;
 	}
 
@@ -109,9 +137,12 @@ public class ExcelExport extends AbstractExcelResolver{
 	 * 创建Excel标题
 	 * @param excelDefinition
 	 * @param sheet
+	 * @return 标题行
 	 */
-	protected void createTitle(ExcelDefinition excelDefinition,Sheet sheet,Workbook workbook) {
-		Row titleRow = sheet.createRow(sheet.getPhysicalNumberOfRows());
+	protected Row createTitle(ExcelDefinition excelDefinition,Sheet sheet,Workbook workbook) {
+		//标题索引号
+		int titleIndex = sheet.getPhysicalNumberOfRows();
+		Row titleRow = sheet.createRow(titleIndex);
 		List<FieldValue> fieldValues = excelDefinition.getFieldValues();
 		for(int i=0;i<fieldValues.size();i++){
 			FieldValue fieldValue = fieldValues.get(i);
@@ -133,6 +164,7 @@ public class ExcelExport extends AbstractExcelResolver{
 			}
 			setCellValue(cell,fieldValue.getTitle());
 		}
+		return titleRow;
 	}
 	
 	/**
@@ -140,13 +172,15 @@ public class ExcelExport extends AbstractExcelResolver{
 	 * @param excelDefinition
 	 * @param sheet
 	 * @param beans
+	 * @param workbook
+	 * @param titleIndex
 	 * @throws Exception
 	 */
-	protected void createRows(ExcelDefinition excelDefinition,Sheet sheet,List<?> beans,Workbook workbook) throws Exception{
+	protected void createRows(ExcelDefinition excelDefinition,Sheet sheet,List<?> beans,Workbook workbook,Row titleRow) throws Exception{
 		int num = sheet.getPhysicalNumberOfRows();
 		for(int i=0;i<beans.size();i++){
 			Row row = sheet.createRow(i+num);
-			createRow(excelDefinition,row,beans.get(i),workbook);
+			createRow(excelDefinition,row,beans.get(i),workbook,sheet,titleRow);
 		}
 	}
 	
@@ -156,9 +190,12 @@ public class ExcelExport extends AbstractExcelResolver{
 	 * @param excelDefinition
 	 * @param row
 	 * @param bean
+	 * @param workbook
+	 * @param sheet
+	 * @param titleRow
 	 * @throws Exception
 	 */
-	protected void createRow(ExcelDefinition excelDefinition, Row row, Object bean,Workbook workbook) throws Exception {
+	protected void createRow(ExcelDefinition excelDefinition, Row row, Object bean,Workbook workbook,Sheet sheet,Row titleRow) throws Exception {
 		List<FieldValue> fieldValues = excelDefinition.getFieldValues();
 		for(int i=0;i<fieldValues.size();i++){
 			FieldValue fieldValue = fieldValues.get(i);
@@ -167,13 +204,16 @@ public class ExcelExport extends AbstractExcelResolver{
 			//从解析器获取值
 			Object val = resolveFieldValue(bean,value, fieldValue, Type.EXPORT);
 			Cell cell = row.createCell(i);
-			//所有cell都按照align进行居中,考虑到性能问题,不开启此功能
-//			if(excelDefinition.getEnableStyle()){
-//				if(fieldValue.getAlign()!=null){
-//					cell.setCellStyle(workbook.createCellStyle());
-//					setAlignStyle(fieldValue, workbook, cell);
-//				}
-//			}
+			//cell样式是否与标题一致,如果一致,找到对应的标题样式进行设置
+			if(excelDefinition.getEnableStyle()){
+				if(fieldValue.isUniformStyle()){
+					//获取标题行
+					//获取对应的标题行样式
+					Cell titleCell = titleRow.getCell(i);
+					CellStyle cellStyle = titleCell.getCellStyle();
+					cell.setCellStyle(cellStyle);
+				}
+			}
 			setCellValue(cell, val);
 		}
 	}
