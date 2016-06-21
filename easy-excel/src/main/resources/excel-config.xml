@@ -4,7 +4,7 @@
 	
 	<!-- 测试使用 ,学生类-->
 	<excel id="student" class="org.easy.excel.test.model.StudentModel" sheetname="测试学生列表" enableStyle="true">
-		<field name="id" align="center" titleBgColor="dark_blue"
+		<field name="id" align="center" titleBgColor="dark_blue" uniformStyle="true"
 		columnWidth="3000" titleFountColor="white" title="ID"/>
 		<field name="name" title="学生姓名" align="right"/>
 		<field name="age" title="年龄" align="center" titleFountColor="red" titleBgColor="dark_blue" isNull="false" regex="^[1-9]\d*$" regexErrMsg="必须是数字"/>
@@ -17,7 +17,7 @@
 		
 		<!-- 复杂对象 -->
 		<field name="book.bookName" title="图书名称" columnWidth="6000"/>
-		<field name="book.author.authorName" title="作者名称"/>
+		<field name="book.author.authorName" title="作者名称" columnWidth="6000"/>
 	</excel>
 	
 	<excel id="student2" class="org.easy.excel.test.model.StudentModel">
