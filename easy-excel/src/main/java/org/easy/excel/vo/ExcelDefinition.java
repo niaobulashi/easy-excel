@@ -30,6 +30,7 @@ public class ExcelDefinition {
 	private List<FieldValue> fieldValues = new ArrayList<>();
 	
 	/** 是否开启导出样式支持,(数据量很大时,不建议开启),底层可能会抛出异常,具体查询底层实现WorkBook.createCellStyle */
+	//关于大数据量,已经修复,可以放心使用样式了,目前经过测试(一百万)数据不会有任何错误
 	private Boolean enableStyle = false;
 
 	public String getId() {
