@@ -1,6 +1,7 @@
 package org.easy.util;
 
 
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -17,7 +19,9 @@ import java.util.Set;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.Validate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
@@ -65,11 +69,9 @@ public abstract class ReflectUtil {
 		for(String propName : propNames){
 			Object val = ReflectUtil.getProperty(model, propName);
 			if(val instanceof String){
-				if(null!=val){
-					String valStr = (String)val;
-					valStr = valStr.trim();
-					setProperty(model, propName, valStr);
-				}
+				String valStr = (String)val;
+				valStr = valStr.trim();
+				ReflectUtil.setProperty(model, propName, valStr);
 			}
 		}
 	}
@@ -422,5 +424,43 @@ public abstract class ReflectUtil {
 			throw new RuntimeException(e);
 		}
 	}
-
+	
+	/**
+	 * 获取n个类,相同的父类类型,如果多个相同的父类,获取最接近的的,
+	 * 如果传递的对象是Object.class 直接返回null 
+	 * @param clazzs 
+	 * @return 相同的父类Class
+	 */
+	public static Class<?> getEqSuperClass(Class<?> ...clazzs){
+		Validate.notEmpty(clazzs);
+		List<List<Class<?>>> container = new ArrayList<>(clazzs.length);
+		for(Class<?>clazz :clazzs){
+			if(clazz==Object.class)return null;
+			List<Class<?>> superClazz = new ArrayList<>(5);
+			for(clazz=clazz.getSuperclass();clazz!=Object.class;clazz=clazz.getSuperclass()){
+				superClazz.add(clazz);
+			}
+			container.add(superClazz);
+		}
+		List<Class<?>> result = new ArrayList<>(5);  
+		Iterator<List<Class<?>>> it = container.iterator();
+		int len =0;
+		while(it.hasNext()){
+			if(len == 0){
+				result.addAll(it.next());
+			}else{
+				result.retainAll(it.next());
+				if(CollectionUtils.isEmpty(result)){
+					break;
+				}
+			}
+			len++;
+		}
+		//不管相同父类有几个,返回最接近的
+		if(CollectionUtils.isNotEmpty(result)){
+			return result.get(0);
+		}
+		return Object.class;
+	}
+	
 }
