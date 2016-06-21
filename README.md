@@ -32,7 +32,7 @@ org.easy.excel.test.ImportTest
 	<!-- 测试使用 ,学生类-->
 	<excel id="student" class="org.easy.excel.test.model.StudentModel" enableStyle="true">
 		<field name="id" align="center" titleBgColor="dark_blue"
-		columnWidth="3000" titleFountColor="white" title="ID"/>
+		columnWidth="3000" titleFountColor="white" title="ID" uniformStyle="true"/>
 		<field name="name" title="学生姓名" align="right"/>
 		<field name="age" title="年龄" align="center" titleFountColor="red" titleBgColor="dark_blue" isNull="false" regex="^[1-9]\d*$" regexErrMsg="必须是数字"/>
 		<field name="studentNo" title="学号" titleFountColor="blue" isNull="false" />
