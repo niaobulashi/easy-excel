@@ -77,12 +77,12 @@ public abstract class ReflectUtil {
 	}
 	
 	/**
-	 * 获取指定类的所有字段名称,排除static,final字段
+	 * 获取指定类的所有字段,排除static,final字段
 	 * @param clazz 类型
-	 * @return List<字段名称>
+	 * @return List<字段>
 	 */
-	public static List<String> getFieldNames(Class<?> clazz){
-		List<String> fieldNames = new ArrayList<>();
+	public static List<Field> getFields(Class<?> clazz){
+		List<Field> fieldResult = new ArrayList<>();
 		while(clazz!=Object.class){
 			try {
 				Field[] fields = clazz.getDeclaredFields();
@@ -92,10 +92,24 @@ public abstract class ReflectUtil {
 					if(Modifier.isStatic(modifiers)||Modifier.isFinal(modifiers)){
 						continue;
 					}
-					fieldNames.add(field.getName());
+					fieldResult.add(field);
 				}
 			} catch (Exception ignore) {}
 			clazz = clazz.getSuperclass();
+		}
+		return fieldResult;
+	}
+	
+	/**
+	 * 获取指定类的所有字段名称,排除static,final字段
+	 * @param clazz 类型
+	 * @return List<字段名称>
+	 */
+	public static List<String> getFieldNames(Class<?> clazz){
+		List<Field> fields = getFields(clazz);
+		List<String> fieldNames = new ArrayList<>(fields.size());
+		for(Field field:fields){
+			fieldNames.add(field.getName());
 		}
 		return fieldNames;
 	}
