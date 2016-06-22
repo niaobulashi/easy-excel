@@ -182,7 +182,7 @@ public abstract class AbstractExcelResolver implements ResolveFieldValueConverte
 				if(conv == null){
 					synchronized(this){
 						if(conv == null){
-							conv = (ResolveFieldValueConverter) ReflectUtil.newInstance(Class.forName(convName));
+							conv = getBean(convName);
 							resolveFieldValueConverters.put(convName, conv);
 						}
 					}
@@ -195,6 +195,11 @@ public abstract class AbstractExcelResolver implements ResolveFieldValueConverte
 
 	}
 	
+	//获取bean
+	private ResolveFieldValueConverter getBean(String convName) throws ClassNotFoundException {
+		return (ResolveFieldValueConverter) ReflectUtil.newInstance(Class.forName(convName));
+	}
+
 	/**
 	 * 解析配置中Field元素 处理后的值
 	 * 
