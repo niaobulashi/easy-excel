@@ -79,9 +79,9 @@ public class ExportTest {
 		//注意,如果传的集合为null,默认导出所有字段,所以想要导出指定的字段集合一定不能为empty,
 		//这里我指定导出id,name,age三个字段(以配置文件中的name属性为准,而不是标题)
 		List<String> specifyFields = new ArrayList<>();
-		specifyFields.add("id");
-		specifyFields.add("name");
 		specifyFields.add("age");
+		specifyFields.add("name");
+		specifyFields.add("id");
 		List<StudentModel> stus = getStudents();
 		Workbook workbook = context.createExcel(excelId,stus,null,specifyFields);
 		workbook.write(ops);
@@ -134,7 +134,7 @@ public class ExportTest {
 	
 	//获取模拟数据,数据库数据...
 	public static List<StudentModel> getStudents(){
-		int size = 10;
+		int size = 100;
 		List<StudentModel> students = new ArrayList<>(size);
 		for(int i=0;i<size;i++){
 			StudentModel stu = new StudentModel();
