@@ -24,7 +24,7 @@ public class ExcelDefinition {
 	private String sheetname;
 	
 	/**导出时,sheet页所有的默认列宽,可以不设置*/
-	private int defaultColumnWidth;
+	private Integer defaultColumnWidth;
 
 	/** Field属性的全部定义 */
 	private List<FieldValue> fieldValues = new ArrayList<>();
