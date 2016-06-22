@@ -32,5 +32,20 @@
 		<field name="book.bookName" title="图书名称" />
 		<field name="book.author.authorName" title="作者名称"/>
 	</excel>
+	<!-- ExcelXmlBuilder 生成的配置文件 -->
+	<excel id="student3" class="org.easy.excel.test.model.StudentModel" sheetname="学生信息列表" defaultColumnWidth="5000" enableStyle="true">
+		<field name="id" title="id" isNull="true" uniformStyle="true" columnWidth="5000" align="left" regex="" regexErrMsg="id不合法"/>
+		<field name="createTime" title="createTime" pattern="yyyy/MM/dd" isNull="true" uniformStyle="true" columnWidth="5000" align="left" regex="" regexErrMsg="createTime不合法"/>
+		<field name="name" title="name" isNull="true" uniformStyle="true" columnWidth="5000" align="left" regex="" regexErrMsg="name不合法"/>
+		<field name="age" title="age" isNull="true" uniformStyle="true" columnWidth="5000" align="left" regex="" regexErrMsg="age不合法"/>
+		<field name="studentNo" title="studentNo" isNull="true" uniformStyle="true" columnWidth="5000" align="left" regex="" regexErrMsg="studentNo不合法"/>
+		<field name="createUser" title="createUser" isNull="true" uniformStyle="true" columnWidth="5000" align="left" regex="" regexErrMsg="createUser不合法"/>
+		<field name="createUserId" title="createUserId" isNull="true" uniformStyle="true" columnWidth="5000" align="left" regex="" regexErrMsg="createUserId不合法"/>
+		<field name="status" title="status" isNull="true" uniformStyle="true" columnWidth="5000" align="left" regex="" regexErrMsg="status不合法"/>
+		<field name="book.bookName" title="book.bookName" isNull="true" uniformStyle="true" columnWidth="5000" align="left" regex="" regexErrMsg="book.bookName不合法"/>
+		<field name="book.author.authorName" title="book.author.authorName" isNull="true" uniformStyle="true" columnWidth="5000" align="left" regex="" regexErrMsg="book.author.authorName不合法"/>
+	</excel>
+
+
 	
 </excels>
