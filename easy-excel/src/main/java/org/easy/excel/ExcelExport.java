@@ -98,10 +98,14 @@ public class ExcelExport extends AbstractExcelResolver{
 			ReflectUtil.copyProps(excelDefinition, newDef,"fieldValues");
 			List<FieldValue> oldValues = excelDefinition.getFieldValues();
 			List<FieldValue> newValues = new ArrayList<>(oldValues.size());
-			for(FieldValue field:oldValues){
-				String fieldName = field.getName();
-				if(fields.contains(fieldName)){
-					newValues.add(field);
+			//按照顺序,进行添加
+			for(String name:fields){
+				for(FieldValue field:oldValues){
+					String fieldName = field.getName();
+					if(fieldName.equals(name)){
+						newValues.add(field);
+						break;
+					}
 				}
 			}
 			newDef.setFieldValues(newValues);
@@ -124,9 +128,6 @@ public class ExcelExport extends AbstractExcelResolver{
 		if(header!=null){
 			header.buildHeader(sheet,excelDefinition,beans);
 		}
-		// 默认列宽设置
-		if(excelDefinition.getDefaultColumnWidth()!=null)
-			sheet.setDefaultColumnWidth(excelDefinition.getDefaultColumnWidth());
 		
 		Row titleRow = createTitle(excelDefinition,sheet,workbook);
 		createRows(excelDefinition, sheet, beans,workbook,titleRow);
@@ -149,6 +150,10 @@ public class ExcelExport extends AbstractExcelResolver{
 			//设置单元格宽度
 			if(fieldValue.getColumnWidth() !=null){
 				sheet.setColumnWidth(i, fieldValue.getColumnWidth());
+			}
+			//如果默认的宽度不为空,使用默认的宽度
+			else if(excelDefinition.getDefaultColumnWidth()!=null){
+				sheet.setColumnWidth(i, excelDefinition.getDefaultColumnWidth());
 			}
 			Cell cell = titleRow.createCell(i);
 			if(excelDefinition.getEnableStyle()){
