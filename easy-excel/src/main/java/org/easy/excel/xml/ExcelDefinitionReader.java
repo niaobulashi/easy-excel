@@ -117,7 +117,19 @@ public class ExcelDefinitionReader {
 		if(StringUtils.isNotBlank(ele.getAttribute("enableStyle"))){
 			excelDefinition.setEnableStyle(Boolean.parseBoolean(ele.getAttribute("enableStyle")));
 		}
-		
+		//默认对齐方式
+		String defaultAlign = ele.getAttribute("defaultAlign");
+		if(StringUtils.isNotBlank(defaultAlign)){
+			try{
+				//获取cell对齐方式的常量值
+				short constValue = ReflectUtil.getConstValue(CellStyle.class, "ALIGN_"+defaultAlign.toUpperCase());
+				excelDefinition.setDefaultAlign(constValue);
+			}catch(Exception e){
+				log.error(e);
+				throw new IllegalArgumentException("Excel 配置文件[" + location + "] , id为 [ " + excelDefinition.getId()
+				+ " ] 的 defaultAlign 属性不能为 [ "+defaultAlign+" ],目前支持的left,center,right");
+			}
+		}
 		processField(ele, excelDefinition);
 		registry.put(id, excelDefinition);
 	}
