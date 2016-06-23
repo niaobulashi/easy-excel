@@ -4,6 +4,10 @@
 http://my.oschina.net/lis1314/blog/693989
 
 
+ **关于与Spring集成相关，这里我只做了说明：具体参考
+org.easy.web包下的readMe.txt** 
+
+
  **一、jar包依赖** 
 
 ![输入图片说明](http://git.oschina.net/uploads/images/2016/0619/175936_b9d561e5_690778.png "在这里输入图片标题")
