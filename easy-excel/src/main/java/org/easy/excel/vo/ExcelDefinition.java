@@ -26,6 +26,9 @@ public class ExcelDefinition {
 	/**导出时,sheet页所有的默认列宽,可以不设置*/
 	private Integer defaultColumnWidth;
 
+	/**导出时,cell默认对其方式:支持,center,left,right*/
+	private Short defaultAlign;
+	
 	/** Field属性的全部定义 */
 	private List<FieldValue> fieldValues = new ArrayList<>();
 	
@@ -87,5 +90,13 @@ public class ExcelDefinition {
 
 	public void setEnableStyle(Boolean enableStyle) {
 		this.enableStyle = enableStyle;
+	}
+
+	public Short getDefaultAlign() {
+		return defaultAlign;
+	}
+
+	public void setDefaultAlign(Short defaultAlign) {
+		this.defaultAlign = defaultAlign;
 	}
 }
