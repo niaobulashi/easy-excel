@@ -1,8 +1,5 @@
 package org.easy.excel;
 
-
-
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -157,10 +154,10 @@ public class ExcelExport extends AbstractExcelResolver{
 			}
 			Cell cell = titleRow.createCell(i);
 			if(excelDefinition.getEnableStyle()){
-				if(fieldValue.getAlign()!=null || fieldValue.getTitleBgColor()!=null || fieldValue.getTitleFountColor() !=null){
+				if(fieldValue.getAlign()!=null || fieldValue.getTitleBgColor()!=null || fieldValue.getTitleFountColor() !=null || excelDefinition.getDefaultAlign()!=null){
 					cell.setCellStyle(workbook.createCellStyle());
 					//设置cell 对齐方式
-					setAlignStyle(fieldValue, workbook, cell);
+					setAlignStyle(fieldValue, workbook, cell,excelDefinition);
 					//设置标题背景色
 					setTitleBgColorStyle(fieldValue, workbook, cell);
 					//设置标题字体色
@@ -224,10 +221,14 @@ public class ExcelExport extends AbstractExcelResolver{
 	}
 	
 	//设置cell 对齐方式
-	private void setAlignStyle(FieldValue fieldValue,Workbook workbook,Cell cell){
+	private void setAlignStyle(FieldValue fieldValue,Workbook workbook,Cell cell,ExcelDefinition excelDefinition){
 		if(fieldValue.getAlign()!=null){
 			CellStyle cellStyle = cell.getCellStyle();
 			cellStyle.setAlignment(fieldValue.getAlign());
+			cell.setCellStyle(cellStyle);
+		}else if(excelDefinition.getDefaultAlign()!=null){
+			CellStyle cellStyle = cell.getCellStyle();
+			cellStyle.setAlignment(excelDefinition.getDefaultAlign());
 			cell.setCellStyle(cellStyle);
 		}
 	}
