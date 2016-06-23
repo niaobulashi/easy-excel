@@ -4,7 +4,7 @@
 http://my.oschina.net/lis1314/blog/693989
 
 
- **关于与Spring集成相关，这里我只做了说明：具体参考
+ **关于与Spring集成相关：具体参考
 org.easy.web包下的readMe.txt** 
 
 
