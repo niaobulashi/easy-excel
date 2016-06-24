@@ -150,19 +150,21 @@ public abstract class AbstractExcelResolver implements ResolveFieldValueConverte
 				String pattern = fieldValue.getPattern();
 				String format = fieldValue.getFormat();
 				if (StringUtils.isNotBlank(pattern)) {
+					String [] patterns = StringUtils.split(pattern, ",");
 					if (Type.EXPORT == type) {
-						return DateUtil.date2Str((Date) value, pattern);
+						//导出使用第一个pattern
+						return DateUtil.date2Str((Date) value, patterns[0]);
 					} else if (Type.IMPORT == type) {
 						if (value instanceof String) {
-							try{
-								return DateUtil.str2Date((String) value, pattern);
-							}catch(Exception e){
+							Date date = DateUtil.tryStr2Date((String) value, patterns);
+							if(date==null){
 								StringBuilder errMsg = new StringBuilder("[");
 								errMsg.append(value.toString()).append("]")
-								.append("不能转换成日期,正确的格式应该是:").append(pattern);
+								.append("不能转换成日期,正确的格式应该是:[").append(pattern+"]");
 								String err = getErrorMsg(fieldValue, errMsg.toString(), rowNum);
 								throw new ExcelException(err);
 							}
+							return date;
 						} else if (value instanceof Date) {
 							return value;
 						} else if(value instanceof Number){
@@ -199,7 +201,13 @@ public abstract class AbstractExcelResolver implements ResolveFieldValueConverte
 	//获取bean
 	private ResolveFieldValueConverter getBean(String convName) throws ClassNotFoundException {
 		//如果自己集成了springUtil那么可以在打开这里注释的代码
-		//return (ResolveFieldValueConverter) SpringUtil.getBean(Class.forName(convName));
+		/*ResolveFieldValueConverter bean = null;
+		if(SpringUtil.isInited()){
+			bean = (ResolveFieldValueConverter) SpringUtil.getBean(Class.forName(convName));
+		}else{
+			bean =  (ResolveFieldValueConverter) ReflectUtil.newInstance(Class.forName(convName));
+		}
+		return bean;*/
 		return (ResolveFieldValueConverter) ReflectUtil.newInstance(Class.forName(convName));
 	}
 
