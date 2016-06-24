@@ -9,6 +9,7 @@ import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.Validate;
 
 /**
  * 日期工具类
@@ -28,7 +29,39 @@ public abstract class DateUtil {
 	/** yyyy年MM月dd日 */
 	public static final String CN_DATE_FORMAT = "yyyy年MM月dd日";
 
+	/**
+	 * 尝试把一个String按照指定的多个pattern进行转换,转换成功返回结果,失败返回null,如果值为空直接返回null
+	 * @param value 需要转换为日期的字符串
+	 * @param patterns 日期pattern,多个以[,]分割
+	 * @return
+	 */
+	public static Date tryStr2Date(String value, String patterns) {
+		return tryStr2Date(value, StringUtils.split(patterns, ","));
+	}
+	
+	/**
+	 * 尝试把一个String按照指定的多个pattern进行转换,转换成功返回结果,失败返回null,如果值为空直接返回null
+	 * @param value 需要转换为日期的字符串
+	 * @param patterns 日期pattern数组
+	 * @return
+	 */
+	public static Date tryStr2Date(String value, String [] patterns) {
+		Validate.notEmpty(patterns,"patterns 不能为空");
+		Date d = null;
+		if (StringUtils.isNotEmpty(value)) {
+			for (String p : patterns) {
+				try {
+					d = DateUtil.str2Date(value, p);
+					break;
+				} catch (Exception e) {
+					continue;
+				}
+			}
+		}
+		return d;
+	}
 
+	
 	/**
 	 * 按指定格式将字符串转换为日期
 	 * @param dateStr 日期串
