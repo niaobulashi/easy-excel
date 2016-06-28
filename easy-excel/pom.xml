@@ -9,7 +9,7 @@
 		<commons-beanutils.version>1.9.2</commons-beanutils.version>
 		<commons-collections.version>3.2.1</commons-collections.version>
 		<commons-lang.version>2.6</commons-lang.version>
-		<poi.version>3.13</poi.version>
+		<poi.version>3.14</poi.version>
 		<xmlbeans.version>2.6.0</xmlbeans.version>
 		<spring.version>4.2.6.RELEASE</spring.version>
 		<log4j.version>1.2.17</log4j.version>
@@ -61,6 +61,7 @@
 			<artifactId>xmlbeans</artifactId>
 			<version>${xmlbeans.version}</version>
 		</dependency>
+		<!-- spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
@@ -71,6 +72,12 @@
 			<artifactId>spring-beans</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- log -->
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
