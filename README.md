@@ -3,8 +3,8 @@
  **使用介绍** 
 http://my.oschina.net/lis1314/blog/693989
 
-
- **关于与Spring集成只需要配置即可
+ **
+关于与Spring集成只需要加入下面配置** 
 
 ```
 <!-- 初始化SpringUtil -->
