@@ -4,12 +4,14 @@ import org.easy.excel.ExcelException;
 import org.easy.excel.ResolveFieldValueConverter;
 import org.easy.excel.test.model.StudentModel;
 import org.easy.excel.vo.FieldValue;
+import org.springframework.stereotype.Component;
 
 /**
  * 自定义转换,测试学生创建人
  * @author lisuo
  *
  */
+//@Component,与spring集成之后可以使用
 public class CreateUserFieldValueConverter implements ResolveFieldValueConverter{
 
 	@Override
