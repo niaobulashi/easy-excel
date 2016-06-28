@@ -4,8 +4,12 @@
 http://my.oschina.net/lis1314/blog/693989
 
 
- **关于与Spring集成相关：具体参考
-org.easy.web包下的readMe.txt** 
+ **关于与Spring集成只需要配置即可
+
+```
+<!-- 初始化SpringUtil -->
+<bean id="springUtil" class="org.easy.util.SpringUtil"/>
+```
 
 
  **一、jar包依赖** 
