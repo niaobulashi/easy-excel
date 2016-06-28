@@ -16,6 +16,7 @@ import org.easy.excel.vo.FieldValue;
 import org.easy.excel.xml.ExcelDefinitionReader;
 import org.easy.util.DateUtil;
 import org.easy.util.ReflectUtil;
+import org.easy.util.SpringUtil;
 
 
 /**
@@ -200,15 +201,13 @@ public abstract class AbstractExcelResolver implements ResolveFieldValueConverte
 	
 	//获取bean
 	private ResolveFieldValueConverter getBean(String convName) throws ClassNotFoundException {
-		//如果自己集成了springUtil那么可以在打开这里注释的代码
-		/*ResolveFieldValueConverter bean = null;
+		ResolveFieldValueConverter bean = null;
 		if(SpringUtil.isInited()){
 			bean = (ResolveFieldValueConverter) SpringUtil.getBean(Class.forName(convName));
 		}else{
 			bean =  (ResolveFieldValueConverter) ReflectUtil.newInstance(Class.forName(convName));
 		}
-		return bean;*/
-		return (ResolveFieldValueConverter) ReflectUtil.newInstance(Class.forName(convName));
+		return bean;
 	}
 
 	/**
