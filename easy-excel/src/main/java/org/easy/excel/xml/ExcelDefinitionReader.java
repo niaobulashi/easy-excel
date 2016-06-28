@@ -14,6 +14,7 @@ import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.IndexedColors;
+import org.easy.excel.ResolveFieldValueConverter;
 import org.easy.excel.vo.ExcelDefinition;
 import org.easy.excel.vo.FieldValue;
 import org.easy.util.ReflectUtil;
@@ -235,15 +236,15 @@ public class ExcelDefinitionReader {
 					String resolveFieldValueConverterName = fieldEle.getAttribute("resolveFieldValueConverterName");
 					if(StringUtils.isNotBlank(resolveFieldValueConverterName)){
 						fieldValue.setResolveFieldValueConverterName(resolveFieldValueConverterName);
-//						try {
-//							Class<?> clazz = Class.forName(resolveFieldValueConverterName);
-//							if(!ResolveFieldValueConverter.class.isAssignableFrom(clazz)){
-//								throw new RuntimeException("配置的："+resolveFieldValueConverterName+"错误,不是一个标准的["+ResolveFieldValueConverter.class.getName()+"]实现");
-//							}
-//							fieldValue.setResolveFieldValueConverterName(resolveFieldValueConverterName);
-//						} catch (ClassNotFoundException e) {
-//							throw new RuntimeException("无法找到定义的解析器：["+resolveFieldValueConverterName+"]"+"请检查配置信息");
-//						}
+						try {
+							Class<?> clazz = Class.forName(resolveFieldValueConverterName);
+							if(!ResolveFieldValueConverter.class.isAssignableFrom(clazz)){
+								throw new RuntimeException("配置的："+resolveFieldValueConverterName+"错误,不是一个标准的["+ResolveFieldValueConverter.class.getName()+"]实现");
+							}
+							fieldValue.setResolveFieldValueConverterName(resolveFieldValueConverterName);
+						} catch (ClassNotFoundException e) {
+							throw new RuntimeException("无法找到定义的解析器：["+resolveFieldValueConverterName+"]"+"请检查配置信息");
+						}
 					}
 					
 					
