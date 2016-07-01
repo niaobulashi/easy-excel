@@ -54,6 +54,18 @@ public class ExcelContext  {
 	public Workbook createExcel(String id, List<?> beans) throws Exception {
 		return createExcel(id, beans, null, null);
 	}
+	
+	/**
+	 * 创建Excel部分信息
+	 * @param id 配置ID
+	 * @param beans 配置class对应的List
+	 * @return Workbook
+	 * @throws Exception 
+	 */
+	public ExcelExportResult createExcelForPart(String id, List<?> beans) throws Exception {
+		return createExcelForPart(id, beans, null, null);
+	}
+	
 	/**
 	 * 创建Excel
 	 * @param id 配置ID
@@ -65,6 +77,19 @@ public class ExcelContext  {
 	public Workbook createExcel(String id, List<?> beans,ExcelHeader header) throws Exception {
 		return createExcel(id, beans, header, null);
 	}
+	
+	/**
+	 * 创建Excel部分信息
+	 * @param id 配置ID
+	 * @param beans 配置class对应的List
+	 * @param header 导出之前,在标题前面做出一些额外的操作，比如增加文档描述等,可以为null
+	 * @return Workbook
+	 * @throws Exception 
+	 */
+	public ExcelExportResult createExcelForPart(String id, List<?> beans,ExcelHeader header) throws Exception {
+		return createExcelForPart(id, beans, header, null);
+	}
+	
 	/**
 	 * 创建Excel
 	 * @param id 配置ID
@@ -75,6 +100,23 @@ public class ExcelContext  {
 	 * @throws Exception 
 	 */
 	public Workbook createExcel(String id, List<?> beans,ExcelHeader header,List<String> fields) throws Exception {
+		try{
+			return excelExport.createExcel(id, beans,header,fields).build();
+		}catch(Exception e){
+			throw e;
+		}
+	}
+	
+	/**
+	 * 创建Excel部分信息
+	 * @param id 配置ID
+	 * @param beans 配置class对应的List
+	 * @param header 导出之前,在标题前面做出一些额外的操作,比如增加文档描述等,可以为null
+	 * @param fields 指定Excel导出的字段(bean对应的字段名称),可以为null
+	 * @return Workbook
+	 * @throws Exception 
+	 */
+	public ExcelExportResult createExcelForPart(String id, List<?> beans,ExcelHeader header,List<String> fields) throws Exception {
 		try{
 			return excelExport.createExcel(id, beans,header,fields);
 		}catch(Exception e){
