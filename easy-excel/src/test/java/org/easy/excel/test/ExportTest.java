@@ -11,6 +11,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.easy.excel.ExcelContext;
+import org.easy.excel.ExcelExportResult;
 import org.easy.excel.ExcelHeader;
 import org.easy.excel.test.model.AuthorModel;
 import org.easy.excel.test.model.BookModel;
@@ -32,6 +33,30 @@ public class ExportTest {
 	private static ExcelContext context = new ExcelContext("excel-config.xml");
 	//Excel配置文件中配置的id
 	private static String excelId = "student";
+	
+	/***
+	 * 导出测试,分多次导出
+	 * @throws Exception
+	 */
+	@Test
+	public void testExporPart()throws Exception{
+		//需求概述.数据量较大,可能大批量数据导出,会对DB造成压力,这里分批次检索数据,一部分一部分向Excel中写
+		OutputStream ops = new FileOutputStream(path);
+		ExcelExportResult exportResult = context.createExcelForPart(excelId,getStudents());
+		//假设这是第二次从数据库或其他平台查询到到数据
+		exportResult.append(getStudents());
+		//第n次....
+		exportResult.append(getStudents());
+		exportResult.append(getStudents());
+		exportResult.append(getStudents());
+		exportResult.append(getStudents());
+
+		Workbook workbook = exportResult.build();
+		workbook.write(ops);
+		ops.close();
+		workbook.close();
+	}
+	
 	/***
 	 * 导出测试,简单版
 	 * @throws Exception
@@ -134,7 +159,7 @@ public class ExportTest {
 	
 	//获取模拟数据,数据库数据...
 	public static List<StudentModel> getStudents(){
-		int size = 100;
+		int size = 5;
 		List<StudentModel> students = new ArrayList<>(size);
 		for(int i=0;i<size;i++){
 			StudentModel stu = new StudentModel();
