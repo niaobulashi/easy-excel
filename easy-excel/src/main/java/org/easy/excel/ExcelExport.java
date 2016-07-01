@@ -38,8 +38,8 @@ public class ExcelExport extends AbstractExcelResolver{
 	 * @return
 	 * @throws Exception
 	 */
-	public Workbook createExcel(String id,List<?> beans,ExcelHeader header,List<String> fields) throws Exception{
-		Workbook workbook = null;
+	public ExcelExportResult createExcel(String id,List<?> beans,ExcelHeader header,List<String> fields) throws Exception{
+		ExcelExportResult exportResult = null;
 		if(CollectionUtils.isNotEmpty(beans)){
 			//从注册信息中获取Bean信息
 			ExcelDefinition excelDefinition = definitionReader.getRegistry().get(id);
@@ -67,9 +67,9 @@ public class ExcelExport extends AbstractExcelResolver{
 				}
 				
 			}
-			workbook = doCreateExcel(excelDefinition,beans,header);
+			exportResult = doCreateExcel(excelDefinition,beans,header);
 		}
-		return workbook;
+		return exportResult;
 	}
 	
 	//抽取父类拥用的字段,同时从它的基础只上在进行筛选指定的字段
@@ -112,7 +112,7 @@ public class ExcelExport extends AbstractExcelResolver{
 		
 	}
 
-	protected Workbook doCreateExcel(ExcelDefinition excelDefinition, List<?> beans,ExcelHeader header) throws Exception {
+	protected ExcelExportResult doCreateExcel(ExcelDefinition excelDefinition, List<?> beans,ExcelHeader header) throws Exception {
 		// 创建Workbook
 		Workbook workbook = new SXSSFWorkbook();
 		Sheet sheet = null;
@@ -128,7 +128,8 @@ public class ExcelExport extends AbstractExcelResolver{
 		
 		Row titleRow = createTitle(excelDefinition,sheet,workbook);
 		createRows(excelDefinition, sheet, beans,workbook,titleRow);
-		return workbook;
+		ExcelExportResult exportResult = new ExcelExportResult(excelDefinition, sheet, workbook, titleRow,this);
+		return exportResult;
 	}
 
 	/**
@@ -178,7 +179,7 @@ public class ExcelExport extends AbstractExcelResolver{
 	 * @param titleIndex
 	 * @throws Exception
 	 */
-	protected void createRows(ExcelDefinition excelDefinition,Sheet sheet,List<?> beans,Workbook workbook,Row titleRow) throws Exception{
+	void createRows(ExcelDefinition excelDefinition,Sheet sheet,List<?> beans,Workbook workbook,Row titleRow) throws Exception{
 		int num = sheet.getPhysicalNumberOfRows();
 		for(int i=0;i<beans.size();i++){
 			Row row = sheet.createRow(i+num);
