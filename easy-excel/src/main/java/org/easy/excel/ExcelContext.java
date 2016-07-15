@@ -100,11 +100,7 @@ public class ExcelContext  {
 	 * @throws Exception 
 	 */
 	public Workbook createExcel(String id, List<?> beans,ExcelHeader header,List<String> fields) throws Exception {
-		try{
-			return excelExport.createExcel(id, beans,header,fields).build();
-		}catch(Exception e){
-			throw e;
-		}
+		return excelExport.createExcel(id, beans,header,fields).build();
 	}
 	
 	/**
@@ -117,11 +113,19 @@ public class ExcelContext  {
 	 * @throws Exception 
 	 */
 	public ExcelExportResult createExcelForPart(String id, List<?> beans,ExcelHeader header,List<String> fields) throws Exception {
-		try{
-			return excelExport.createExcel(id, beans,header,fields);
-		}catch(Exception e){
-			throw e;
-		}
+		return excelExport.createExcel(id, beans,header,fields);
+	}
+	
+	/**
+	 * 创建Excel,模板信息
+	 * @param id	 ExcelXML配置Bean的ID
+	 * @param header Excel头信息(在标题之前)
+	 * @param fields 指定导出的字段
+	 * @return
+	 * @throws Exception
+	 */
+	public Workbook createExcelTemplate(String id,ExcelHeader header,List<String> fields) throws Exception{
+		return excelExport.createExcelTemplate(id, header,fields);
 	}
 	
 	/***
@@ -132,11 +136,7 @@ public class ExcelContext  {
 	 * @throws Exception 
 	 */
 	public ExcelImportResult readExcel(String id, InputStream excelStream) throws Exception {
-		try{
-			return excelImport.readExcel(id,0, excelStream);
-		}catch(Exception e){
-			throw e;
-		}
+		return excelImport.readExcel(id,0, excelStream);
 	}
 	
 	/***
@@ -148,11 +148,7 @@ public class ExcelContext  {
 	 * @throws Exception 
 	 */
 	public ExcelImportResult readExcel(String id,int titleIndex, InputStream excelStream) throws Exception {
-		try{
-			return excelImport.readExcel(id,titleIndex, excelStream);
-		}catch(Exception e){
-			throw e;
-		}
+		return excelImport.readExcel(id,titleIndex, excelStream);
 	}
 	
 	/**

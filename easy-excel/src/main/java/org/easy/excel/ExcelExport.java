@@ -72,6 +72,24 @@ public class ExcelExport extends AbstractExcelResolver{
 		return exportResult;
 	}
 	
+	/**
+	 * 创建Excel,模板信息
+	 * @param id	 ExcelXML配置Bean的ID
+	 * @param header Excel头信息(在标题之前)
+	 * @param fields 指定导出的字段
+	 * @return
+	 * @throws Exception
+	 */
+	public Workbook createExcelTemplate(String id,ExcelHeader header,List<String> fields) throws Exception{
+		//从注册信息中获取Bean信息
+		ExcelDefinition excelDefinition = definitionReader.getRegistry().get(id);
+		if(excelDefinition==null){
+			throw new IllegalArgumentException("没有找到 ["+id+"] 的配置信息");
+		}
+		excelDefinition = dynamicCreateExcelDefinition(excelDefinition,fields);
+		return doCreateExcel(excelDefinition, null, header).build();
+	}
+	
 	//抽取父类拥用的字段,同时从它的基础只上在进行筛选指定的字段
 	private ExcelDefinition extractSuperClassFields(ExcelDefinition excelDefinition,List<String> fields,Class<?> realClass){
 		//抽取出父类所拥有的字段
@@ -127,7 +145,10 @@ public class ExcelExport extends AbstractExcelResolver{
 		}
 		
 		Row titleRow = createTitle(excelDefinition,sheet,workbook);
-		createRows(excelDefinition, sheet, beans,workbook,titleRow);
+		//如果listBean不为空,创建数据行
+		if(beans!=null){
+			createRows(excelDefinition, sheet, beans,workbook,titleRow);
+		}
 		ExcelExportResult exportResult = new ExcelExportResult(excelDefinition, sheet, workbook, titleRow,this);
 		return exportResult;
 	}
