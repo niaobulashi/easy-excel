@@ -1,7 +1,6 @@
 package org.easy.util;
 
 
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -76,6 +75,7 @@ public abstract class ReflectUtil {
 		}
 	}
 	
+
 	/**
 	 * 获取指定类的所有字段,排除static,final字段
 	 * @param clazz 类型
@@ -219,7 +219,7 @@ public abstract class ReflectUtil {
 	 */
 	public static Map<String,Object> beanToMap(Object bean, String...propNames) {
 		Map<String,Object> rtn = new HashMap<String,Object>();
-		if(ArrayUtils.isEmpty(propNames) || "*".equals(propNames[0])){
+		if(ArrayUtils.isEmpty(propNames)){
 			List<String> fieldNames = getFieldNames(bean.getClass());
 			for (String fieldName: fieldNames) {
 				Object value = getProperty(bean, fieldName);
@@ -441,7 +441,7 @@ public abstract class ReflectUtil {
 	
 	/**
 	 * 获取n个类,相同的父类类型,如果多个相同的父类,获取最接近的的,
-	 * 如果传递的对象是Object.class 直接返回null 
+	 * 如果传递的对象包含Object.class 直接返回null 
 	 * @param clazzs 
 	 * @return 相同的父类Class
 	 */
