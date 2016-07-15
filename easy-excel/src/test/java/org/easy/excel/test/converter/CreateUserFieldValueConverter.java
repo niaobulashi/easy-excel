@@ -40,7 +40,7 @@ public class CreateUserFieldValueConverter implements ResolveFieldValueConverter
 	//模拟查询数据库
 	private boolean queryForDb(String createUser){
 		if(createUser.startsWith("王五")){
-			System.out.println("数据库有");
+			System.out.println("数据库有查询到王五,发生在org.easy.excel.test.converter.CreateUserFieldValueConverter");
 			return true;
 		}
 		return false;
