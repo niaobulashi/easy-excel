@@ -157,6 +157,51 @@ public class ExportTest {
 		}
 	}
 	
+	/**
+	 * 导出空数据模板示例1
+	 * @throws Exception 
+	 */
+	@Test
+	public void testCreateExcelTemplate1() throws Exception{
+		OutputStream ops = new FileOutputStream(path);
+		Workbook workbook = context.createExcelTemplate(excelId,null,null);
+		workbook.write(ops);
+		ops.close();
+		workbook.close();
+	}
+	/**
+	 * 导出空数据模板示例2
+	 * @throws Exception 
+	 */
+	@Test
+	public void testCreateExcelTemplate2() throws Exception{
+		OutputStream ops = new FileOutputStream(path);
+		//注意,如果传的集合为null,默认导出所有字段,所以想要导出指定的字段集合一定不能为empty,
+		//这里我指定导出id,name,age三个字段(以配置文件中的name属性为准,而不是标题)
+		List<String> specifyFields = new ArrayList<>();
+		specifyFields.add("age");
+		specifyFields.add("name");
+		specifyFields.add("id");
+		//Workbook workbook = context.createExcelTemplate(excelId,null,specifyFields);
+		//Workbook workbook = context.createExcelTemplate(excelId,null,null);
+		Workbook workbook = context.createExcelTemplate(excelId,new ExcelHeader() {
+			@Override
+			public void buildHeader(Sheet sheet, ExcelDefinition excelDefinition, List<?> beans) {
+				Row row1 = sheet.createRow(0);
+				Cell cell = row1.createCell(0);
+				cell.setCellValue("如果需要生成填写案例的数据,建议使用传统的方式,添加一条数据");
+				Row row2 = sheet.createRow(1);
+				Cell cell2 = row2.createCell(0);
+				cell2.setCellValue("这种模板还是有弊端的,没有示例数据,用户不知道填写数据的格式等..");
+			}
+		},
+			//specifyFields);//指定字段,可以打开注释测试
+			null);//不指定字段
+		workbook.write(ops);
+		ops.close();
+		workbook.close();
+	}
+	
 	//获取模拟数据,数据库数据...
 	public static List<StudentModel> getStudents(){
 		int size = 5;
