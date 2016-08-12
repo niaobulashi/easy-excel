@@ -103,7 +103,7 @@ public class ExportTest {
 		OutputStream ops = new FileOutputStream(path);
 		//注意,如果传的集合为null,默认导出所有字段,所以想要导出指定的字段集合一定不能为empty,
 		//这里我指定导出id,name,age三个字段(以配置文件中的name属性为准,而不是标题)
-		List<String> specifyFields = new ArrayList<>();
+		List<String> specifyFields = new ArrayList<String>();
 		specifyFields.add("age");
 		specifyFields.add("name");
 		specifyFields.add("id");
@@ -123,7 +123,7 @@ public class ExportTest {
 		OutputStream ops = new FileOutputStream(path);
 		//注意,如果传的集合为null,默认导出所有字段,所以想要导出指定的字段集合一定不能为empty,
 		//这里我指定导出id,name,age三个字段(以配置文件中的name属性为准,而不是标题)
-		List<String> specifyFields = new ArrayList<>();
+		List<String> specifyFields = new ArrayList<String>();
 		specifyFields.add("id");
 		specifyFields.add("name");
 		specifyFields.add("age");
@@ -178,7 +178,7 @@ public class ExportTest {
 		OutputStream ops = new FileOutputStream(path);
 		//注意,如果传的集合为null,默认导出所有字段,所以想要导出指定的字段集合一定不能为empty,
 		//这里我指定导出id,name,age三个字段(以配置文件中的name属性为准,而不是标题)
-		List<String> specifyFields = new ArrayList<>();
+		List<String> specifyFields = new ArrayList<String>();
 		specifyFields.add("age");
 		specifyFields.add("name");
 		specifyFields.add("id");
@@ -205,7 +205,7 @@ public class ExportTest {
 	//获取模拟数据,数据库数据...
 	public static List<StudentModel> getStudents(){
 		int size = 5;
-		List<StudentModel> students = new ArrayList<>(size);
+		List<StudentModel> students = new ArrayList<StudentModel>(size);
 		for(int i=0;i<size;i++){
 			StudentModel stu = new StudentModel();
 			stu.setId(""+(i+1));
