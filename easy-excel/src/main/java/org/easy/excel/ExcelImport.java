@@ -71,11 +71,11 @@ public class ExcelImport extends AbstractExcelResolver{
 	protected List<List<Object>> readHeader(ExcelDefinition excelDefinition,Sheet sheet,int titleIndex){
 		List<List<Object>> header = null;
 		if(titleIndex!=0){
-			header = new ArrayList<>(titleIndex);
+			header = new ArrayList<List<Object>>(titleIndex);
 			for(int i=0;i<titleIndex;i++){
 				Row row = sheet.getRow(i);
 				short cellNum = row.getLastCellNum();
-				List<Object> item = new ArrayList<>(cellNum);
+				List<Object> item = new ArrayList<Object>(cellNum);
 				for(int j=0;j<cellNum;j++){
 					Cell cell = row.getCell(j);
 					Object value = getCellValue(cell);
@@ -101,7 +101,7 @@ public class ExcelImport extends AbstractExcelResolver{
 		int rowNum = sheet.getLastRowNum();
 		//读取数据的总共次数
 		int totalNum = rowNum - titleIndex;
-		List<T> listBean = new ArrayList<>(totalNum);
+		List<T> listBean = new ArrayList<T>(totalNum);
 		for (int i = titleIndex+1; i <= rowNum; i++) {
 			Row row = sheet.getRow(i);
 			Object bean = readRow(excelDefinition,row,titles,i);

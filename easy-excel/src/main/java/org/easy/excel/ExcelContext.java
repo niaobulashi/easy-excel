@@ -24,7 +24,7 @@ public class ExcelContext  {
 	private ExcelDefinitionReader definitionReader;
 	
 	/** 用于缓存Excel配置 */
-	private Map<String,List<FieldValue>> fieldValueMap = new HashMap<>();
+	private Map<String,List<FieldValue>> fieldValueMap = new HashMap<String, List<FieldValue>>();
 	
 	/**导出*/
 	private ExcelExport excelExport;
@@ -165,7 +165,7 @@ public class ExcelContext  {
 			}
 			//使用copy方式,避免使用者修改原生的配置信息
 			List<FieldValue> fieldValues = def.getFieldValues();
-			list = new ArrayList<>(fieldValues.size());
+			list = new ArrayList<FieldValue>(fieldValues.size());
 			for(FieldValue fieldValue:fieldValues){
 				FieldValue val = new FieldValue();
 				ReflectUtil.copyProps(fieldValue, val);

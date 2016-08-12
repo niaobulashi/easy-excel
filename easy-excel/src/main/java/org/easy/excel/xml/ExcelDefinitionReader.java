@@ -49,7 +49,7 @@ public class ExcelDefinitionReader {
 	 */
 	public ExcelDefinitionReader(String location) throws Exception {
 		this.location = location;
-		registry = new HashMap<>();
+		registry = new HashMap<String, ExcelDefinition>();
 		Resource resource = new ClassPathResource(location);
 		loadExcelDefinitions(resource.getInputStream());
 	}

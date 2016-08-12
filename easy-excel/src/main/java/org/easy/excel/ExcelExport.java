@@ -112,7 +112,7 @@ public class ExcelExport extends AbstractExcelResolver{
 			ExcelDefinition newDef = new ExcelDefinition();
 			ReflectUtil.copyProps(excelDefinition, newDef,"fieldValues");
 			List<FieldValue> oldValues = excelDefinition.getFieldValues();
-			List<FieldValue> newValues = new ArrayList<>(oldValues.size());
+			List<FieldValue> newValues = new ArrayList<FieldValue>(oldValues.size());
 			//按照顺序,进行添加
 			for(String name:fields){
 				for(FieldValue field:oldValues){

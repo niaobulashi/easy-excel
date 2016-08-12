@@ -82,7 +82,7 @@ public abstract class ReflectUtil {
 	 * @return List<字段>
 	 */
 	public static List<Field> getFields(Class<?> clazz){
-		List<Field> fieldResult = new ArrayList<>();
+		List<Field> fieldResult = new ArrayList<Field>();
 		while(clazz!=Object.class){
 			try {
 				Field[] fields = clazz.getDeclaredFields();
@@ -107,7 +107,7 @@ public abstract class ReflectUtil {
 	 */
 	public static List<String> getFieldNames(Class<?> clazz){
 		List<Field> fields = getFields(clazz);
-		List<String> fieldNames = new ArrayList<>(fields.size());
+		List<String> fieldNames = new ArrayList<String>(fields.size());
 		for(Field field:fields){
 			fieldNames.add(field.getName());
 		}
@@ -447,16 +447,16 @@ public abstract class ReflectUtil {
 	 */
 	public static Class<?> getEqSuperClass(Class<?> ...clazzs){
 		Validate.notEmpty(clazzs);
-		List<List<Class<?>>> container = new ArrayList<>(clazzs.length);
+		List<List<Class<?>>> container = new ArrayList<List<Class<?>>>(clazzs.length);
 		for(Class<?>clazz :clazzs){
 			if(clazz==Object.class)return null;
-			List<Class<?>> superClazz = new ArrayList<>(5);
+			List<Class<?>> superClazz = new ArrayList<Class<?>>(5);
 			for(clazz=clazz.getSuperclass();clazz!=Object.class;clazz=clazz.getSuperclass()){
 				superClazz.add(clazz);
 			}
 			container.add(superClazz);
 		}
-		List<Class<?>> result = new ArrayList<>(5);  
+		List<Class<?>> result = new ArrayList<Class<?>>(5);  
 		Iterator<List<Class<?>>> it = container.iterator();
 		int len =0;
 		while(it.hasNext()){

@@ -33,7 +33,7 @@ public abstract class AbstractExcelResolver implements ResolveFieldValueConverte
 	protected ExcelDefinitionReader definitionReader;
 
 	/** 注册字段解析信息 */
-	private Map<String,ResolveFieldValueConverter> resolveFieldValueConverters = new HashMap<>();
+	private Map<String,ResolveFieldValueConverter> resolveFieldValueConverters = new HashMap<String, ResolveFieldValueConverter>();
 	
 	public AbstractExcelResolver(ExcelDefinitionReader definitionReader) {
 		this.definitionReader = definitionReader;
