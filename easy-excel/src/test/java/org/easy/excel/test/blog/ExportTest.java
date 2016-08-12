@@ -19,7 +19,7 @@ public class ExportTest {
 		//创建excel上下文实例,它的构成需要配置文件的路径
 		ExcelContext context = new ExcelContext("excel-config.xml");
 		//获取POI创建结果
-		Workbook workbook = context.createExcel("student2",getStudents());
+		Workbook workbook = context.createExcel("student",getStudents());
 		workbook.write(ops);
 		ops.close();
 		workbook.close();
@@ -28,7 +28,7 @@ public class ExportTest {
 	//获取模拟数据,数据库数据...
 	public static List<StudentModel> getStudents(){
 		int size = 10;
-		List<StudentModel> students = new ArrayList<>(size);
+		List<StudentModel> students = new ArrayList<StudentModel>(size);
 		for(int i=0;i<size;i++){
 			StudentModel stu = new StudentModel();
 			stu.setId(""+(i+1));
