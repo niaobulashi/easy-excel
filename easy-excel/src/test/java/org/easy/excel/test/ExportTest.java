@@ -220,6 +220,7 @@ public class ExportTest {
 			if(i % 2==0){
 				BookModel book = new BookModel();
 				book.setBookName("Thinking in java");
+				book.setPrice(12345.1253);
 				AuthorModel author = new AuthorModel();
 				author.setAuthorName("Bruce Eckel");
 				book.setAuthor(author);
