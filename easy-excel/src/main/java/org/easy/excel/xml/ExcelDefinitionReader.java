@@ -2,6 +2,8 @@ package org.easy.excel.xml;
 
 
 import java.io.InputStream;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -219,11 +221,13 @@ public class ExcelDefinitionReader {
 						try{
 							//获取cell对齐方式的常量值
 							IndexedColors color = ReflectUtil.getConstValue(IndexedColors.class,titleFountColor.toUpperCase());
+							if(color==null){
+								throw new IllegalArgumentException("Excel 配置文件[" + location + "] , id为 [ " + excelDefinition.getId()
+								+ " ] 的 titleFountColor 属性不能为 [ "+titleFountColor+" ],具体看[org.apache.poi.ss.usermodel.IndexedColors]支持的颜色");
+							}
 							fieldValue.setTitleFountColor(color.index);
 						}catch(Exception e){
-							log.error(e);
-							throw new IllegalArgumentException("Excel 配置文件[" + location + "] , id为 [ " + excelDefinition.getId()
-							+ " ] 的 titleFountColor 属性不能为 [ "+titleFountColor+" ],具体看[org.apache.poi.ss.usermodel.IndexedColors]支持的颜色");
+							throw new RuntimeException(e);
 						}
 					}
 					//cell 样式是否与标题样式一致
@@ -247,6 +251,47 @@ public class ExcelDefinitionReader {
 						}
 					}
 					
+					//roundingMode 解析
+					String roundingMode = fieldEle.getAttribute("roundingMode");
+					if(StringUtils.isNotBlank(roundingMode)){
+						try{
+							//获取roundingMode常量值
+							RoundingMode mode =  ReflectUtil.getConstValue(RoundingMode.class,roundingMode.toUpperCase());
+							if(mode == null){
+								throw new IllegalArgumentException("Excel 配置文件[" + location + "] , id为 [ " + excelDefinition.getId()
+								+ " ] 的 roundingMode 属性不能为 [ "+roundingMode+" ],具体看[java.math.RoundingMode]支持的值");
+							}
+							fieldValue.setRoundingMode(mode);
+						}catch(Exception e){
+							throw new RuntimeException(e);
+						}
+					}
+					
+					//解析decimalFormat
+					String decimalFormatPattern = fieldEle.getAttribute("decimalFormatPattern");
+					if(StringUtils.isNotBlank(decimalFormatPattern)){
+						try{
+							fieldValue.setDecimalFormatPattern(decimalFormatPattern);
+							fieldValue.setDecimalFormat(new DecimalFormat(decimalFormatPattern));
+							fieldValue.getDecimalFormat().setRoundingMode(fieldValue.getRoundingMode());
+						}catch(Exception e){
+							log.error(e);
+							throw new IllegalArgumentException("Excel 配置文件[" + location + "] , id为 [ " + excelDefinition.getId()
+							+ " ] 的 decimalFormatPattern 属性不能为 [ "+decimalFormatPattern+" ],请配置标准的JAVA格式");
+						}
+					}
+
+					//解析其他配置项
+					String otherConfig = fieldEle.getAttribute("otherConfig");
+					if(StringUtils.isNotBlank(otherConfig)){
+						fieldValue.setOtherConfig(otherConfig);
+					}
+					
+					//解析,值为空时,字段的默认值
+					String defaultValue = fieldEle.getAttribute("defaultValue");
+					if(StringUtils.isNotBlank(defaultValue)){
+						fieldValue.setDefaultValue(defaultValue);
+					}
 					
 					excelDefinition.getFieldValues().add(fieldValue);
 				}
