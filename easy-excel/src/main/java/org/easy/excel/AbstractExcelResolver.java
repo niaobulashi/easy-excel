@@ -1,10 +1,13 @@
 package org.easy.excel;
 
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
@@ -17,7 +20,6 @@ import org.easy.excel.xml.ExcelDefinitionReader;
 import org.easy.util.DateUtil;
 import org.easy.util.ReflectUtil;
 import org.easy.util.SpringUtil;
-
 
 /**
  * Excel抽象解析器
@@ -150,6 +152,7 @@ public abstract class AbstractExcelResolver implements ResolveFieldValueConverte
 				String name = fieldValue.getName();
 				String pattern = fieldValue.getPattern();
 				String format = fieldValue.getFormat();
+				DecimalFormat decimalFormat = fieldValue.getDecimalFormat();
 				if (StringUtils.isNotBlank(pattern)) {
 					String [] patterns = StringUtils.split(pattern, ",");
 					if (Type.EXPORT == type) {
@@ -177,6 +180,17 @@ public abstract class AbstractExcelResolver implements ResolveFieldValueConverte
 					}
 				} else if (format != null) {
 					return resolverExpression(value.toString(), format, type);
+				} else if (decimalFormat!=null) {
+					if (Type.IMPORT == type) {
+						if(value instanceof String){
+							return decimalFormat.parse(value.toString());
+						}
+					}else if(Type.EXPORT == type){
+						if(value instanceof String){
+							value = ConvertUtils.convert(value, BigDecimal.class);
+						}
+						return decimalFormat.format(value);
+					}
 				} else {
 					return value;
 				}
@@ -195,7 +209,7 @@ public abstract class AbstractExcelResolver implements ResolveFieldValueConverte
 				value = conv.resolveFieldValue(bean,value, fieldValue, type, rowNum);
 			}
 		}
-		return value;
+		return fieldValue.getDefaultValue();
 
 	}
 	
