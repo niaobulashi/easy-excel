@@ -1,5 +1,8 @@
 package org.easy.excel.vo;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
 /**
  * Excel字段定义
  * 
@@ -40,7 +43,22 @@ public class FieldValue {
 	/** cell 样式是否与标题样式一致 */
 	private boolean uniformStyle = false;
 	
+	/** DecimalFormat pattern 只对Number类型有效 */
+	private String decimalFormatPattern;
+	/** DecimalFormat实例,不可配置,它的创建规则基于decimalFormatPattern属性 */
+	private DecimalFormat decimalFormat;
+	/** DecimalFormat实例,RoundingMode ,当处理字符时,假设保留2位小数,那么遇到3位甚至更多的位数如何处理？通过该配置可以指定处理方式,默认向下取整 */
+	private RoundingMode roundingMode = RoundingMode.DOWN;
+	/** 当值为空时,字段的默认值 */
+	private String defaultValue;
 	
+	
+	/*
+	 * 其他配置项:
+	 * 与Excel导入导出无关,或许在自定义转换器时利用该参数可以更灵活配置一些其他信息,
+	 * 比如一个转换器映射多个自动,配置该参数会更加灵活,可以配置成JSON等类型数据,具体根据自己的需求
+	 */
+	private String otherConfig;
 	
 	
 	public FieldValue() {
@@ -156,7 +174,47 @@ public class FieldValue {
 	public void setUniformStyle(boolean uniformStyle) {
 		this.uniformStyle = uniformStyle;
 	}
-	
+
+	public String getOtherConfig() {
+		return otherConfig;
+	}
+
+	public void setOtherConfig(String otherConfig) {
+		this.otherConfig = otherConfig;
+	}
+
+	public String getDecimalFormatPattern() {
+		return decimalFormatPattern;
+	}
+
+	public void setDecimalFormatPattern(String decimalFormatPattern) {
+		this.decimalFormatPattern = decimalFormatPattern;
+	}
+
+	public DecimalFormat getDecimalFormat() {
+		return decimalFormat;
+	}
+
+	public void setDecimalFormat(DecimalFormat decimalFormat) {
+		this.decimalFormat = decimalFormat;
+	}
+
+	public RoundingMode getRoundingMode() {
+		return roundingMode;
+	}
+
+	public void setRoundingMode(RoundingMode roundingMode) {
+		this.roundingMode = roundingMode;
+	}
+
+	public String getDefaultValue() {
+		return defaultValue;
+	}
+
+	public void setDefaultValue(String defaultValue) {
+		this.defaultValue = defaultValue;
+	}
+
 	
 
 }
