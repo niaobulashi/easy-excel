@@ -17,6 +17,7 @@ public class CreateUserFieldValueConverter implements ResolveFieldValueConverter
 	@Override
 	public Object resolveFieldValue(Object bean, Object value, FieldValue fieldValue, Type type, int rowNum)
 			throws Exception {
+		System.out.println("org.easy.excel.test.converter.CreateUserFieldValueConverter:20行输出："+fieldValue.getOtherConfig());
 		//如果是导入
 		if(type==Type.IMPORT){
 			if(queryForDb(value.toString())){
