@@ -9,6 +9,8 @@ public class BookModel {
 	
 	/** 图书名称 */
 	private String bookName;
+	/** 图书价格 */
+	private Double price;
 	/** 作者信息 */
 	private AuthorModel author;
 
@@ -28,10 +30,19 @@ public class BookModel {
 		this.author = author;
 	}
 
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
 	@Override
 	public String toString() {
-		return "BookModel [bookName=" + bookName + ", author=" + author + "]";
+		return "BookModel [bookName=" + bookName + ", price=" + price + ", author=" + author + "]";
 	}
+
 	
 	
 	
