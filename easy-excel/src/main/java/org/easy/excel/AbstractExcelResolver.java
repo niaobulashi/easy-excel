@@ -84,7 +84,9 @@ public abstract class AbstractExcelResolver implements ResolveFieldValueConverte
 			if (value instanceof String) {
 				cell.setCellValue((String) value);
 			} else if (value instanceof Number) {
-				cell.setCellValue(((Number) value).doubleValue());
+				//修复float转double存在精度问题
+				cell.setCellValue(Double.parseDouble(String.valueOf(value)));
+				//cell.setCellValue(((Number) value).doubleValue());
 			} else if (value instanceof Boolean) {
 				cell.setCellValue((Boolean) value);
 			} else if (value instanceof Date) {
