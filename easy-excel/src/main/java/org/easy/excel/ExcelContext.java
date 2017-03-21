@@ -8,10 +8,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Workbook;
-import org.easy.excel.vo.ExcelDefinition;
-import org.easy.excel.vo.ExcelImportResult;
-import org.easy.excel.vo.FieldValue;
-import org.easy.excel.xml.ExcelDefinitionReader;
+import org.easy.excel.config.ExcelDefinition;
+import org.easy.excel.config.FieldValue;
+import org.easy.excel.exception.ExcelException;
+import org.easy.excel.parsing.ExcelExport;
+import org.easy.excel.parsing.ExcelHeader;
+import org.easy.excel.parsing.ExcelImport;
+import org.easy.excel.result.ExcelExportResult;
+import org.easy.excel.result.ExcelImportResult;
+import org.easy.excel.xml.XMLExcelDefinitionReader;
 import org.easy.util.ReflectUtil;
 
 /**
@@ -36,7 +41,8 @@ public class ExcelContext  {
 	 */
 	public ExcelContext(String location) {
 		try {
-			definitionReader = new ExcelDefinitionReader(location);
+			//这里默认使用XML ExcelContent,如果有自己的需求需要自行修改
+			definitionReader = new XMLExcelDefinitionReader(location);
 			excelExport = new ExcelExport(definitionReader);
 			excelImport = new ExcelImport(definitionReader);
 		} catch (Exception e) {
@@ -136,7 +142,19 @@ public class ExcelContext  {
 	 * @throws Exception 
 	 */
 	public ExcelImportResult readExcel(String id, InputStream excelStream) throws Exception {
-		return excelImport.readExcel(id,0, excelStream);
+		return excelImport.readExcel(id,0, excelStream,null);
+	}
+	
+	/***
+	 * 读取Excel信息
+	 * @param id 配置ID
+	 * @param excelStream Excel文件流
+	 * @param sheetIndex Sheet索引位
+	 * @return ExcelImportResult
+	 * @throws Exception 
+	 */
+	public ExcelImportResult readExcel(String id, InputStream excelStream,int sheetIndex) throws Exception {
+		return excelImport.readExcel(id,0, excelStream,sheetIndex);
 	}
 	
 	/***
@@ -148,7 +166,20 @@ public class ExcelContext  {
 	 * @throws Exception 
 	 */
 	public ExcelImportResult readExcel(String id,int titleIndex, InputStream excelStream) throws Exception {
-		return excelImport.readExcel(id,titleIndex, excelStream);
+		return excelImport.readExcel(id,titleIndex, excelStream,null);
+	}
+	
+	/***
+	 * 读取Excel信息
+	 * @param id 配置ID
+	 * @param titleIndex 标题索引,从0开始
+	 * @param excelStream Excel文件流
+	 * @param sheetIndex Sheet索引位
+	 * @return ExcelImportResult
+	 * @throws Exception 
+	 */
+	public ExcelImportResult readExcel(String id,int titleIndex, InputStream excelStream,int sheetIndex) throws Exception {
+		return excelImport.readExcel(id,titleIndex, excelStream,sheetIndex);
 	}
 	
 	/**
@@ -161,7 +192,7 @@ public class ExcelContext  {
 		if(list == null){
 			ExcelDefinition def = definitionReader.getRegistry().get(key);
 			if(def == null){
-				throw new IllegalArgumentException("没有找到["+key+"]的配置信息");
+				throw new ExcelException("没有找到["+key+"]的配置信息");
 			}
 			//使用copy方式,避免使用者修改原生的配置信息
 			List<FieldValue> fieldValues = def.getFieldValues();
