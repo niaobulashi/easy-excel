@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.easy</groupId>
 	<artifactId>easy-excel</artifactId>
-	<version>1.0</version>
+	<version>1.0.RELEASE</version>
 	<!-- 版本定义 -->
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
