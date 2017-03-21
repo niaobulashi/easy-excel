@@ -29,14 +29,15 @@ public class ExcelDownLoadUtil {
 	private static final String CONTENT_TYPE = "application/vnd.ms-excel";
 	
 	/**
-	 * 下载Excel,如果Workbook为空，执行alert('没有可以导出的数据');
+	 * 下载Excel,如果Workbook为空，执行alert(emptyMessage);
 	 * @param workbook POI Workbook
 	 * @param excelName Excel名字（不需要后缀，支持中文处理）
+	 * @param 
 	 * @param request HttpServletRequest
 	 * @param response HttpServletResponse
 	 * @throws IOException
 	 */
-	public static void downLoadExcel(Workbook workbook,String excelName,HttpServletRequest request,HttpServletResponse response)throws IOException{
+	public static void downLoadExcel(Workbook workbook,String excelName,String emptyMessage,HttpServletRequest request,HttpServletResponse response)throws IOException{
 		if (workbook != null) {
 			String excelFileName = encodeDownloadFileName(request, excelName + FILE_SUFFIX);
 			response.setContentType(CONTENT_TYPE);
@@ -48,7 +49,7 @@ public class ExcelDownLoadUtil {
 		} else {
 			response.setContentType("text/html; charset=utf-8");
 			PrintWriter writer = response.getWriter();
-			writer.print("<script language='javascript'>alert('没有可以导出的数据');</script>");
+			writer.print("<script language='javascript'>alert('"+emptyMessage+"');</script>");
 			writer.flush();
 			writer.close();
 		}
