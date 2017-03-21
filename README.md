@@ -48,7 +48,7 @@ org.easy.excel.test.ImportTest
 		<field name="status" title="状态" titleBgColor="green" format="1:正常,0:禁用,-1:无效" />
 		<!-- 创建人,可能需要查询数据库校验,这里使用自定义解析器 -->
 		<field name="createUser" title="创建人" 
-		resolveFieldValueConverterName="org.easy.excel.test.converter.CreateUserFieldValueConverter"/>
+		cellValueConverter="org.easy.excel.test.converter.CreateUserCellValueConverter"/>
 		
 		<!-- 复杂对象 -->
 		<field name="book.bookName" title="图书名称" columnWidth="6000"/>
