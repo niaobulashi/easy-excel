@@ -11,24 +11,24 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.easy.excel.ExcelContext;
-import org.easy.excel.ExcelExportResult;
-import org.easy.excel.ExcelHeader;
+import org.easy.excel.config.ExcelDefinition;
+import org.easy.excel.config.FieldValue;
+import org.easy.excel.parsing.ExcelHeader;
+import org.easy.excel.result.ExcelExportResult;
 import org.easy.excel.test.model.AuthorModel;
 import org.easy.excel.test.model.BookModel;
 import org.easy.excel.test.model.StudentModel;
-import org.easy.excel.vo.ExcelDefinition;
-import org.easy.excel.vo.FieldValue;
 import org.junit.Test;
 
 /**
- * Excel导出测试
+ * Excel导出测试,运行后刷新工程的src/test/resources目录
  * @author lisuo
  *
  */
 public class ExportTest {
 	
 	//测试时文件磁盘路径
-	private static String path = "C:/Users/Administrator/Desktop/stu.xlsx";
+	private static String path = "src/test/resources/test-export-excel.xlsx";
 	//配置文件路径
 	private static ExcelContext context = new ExcelContext("excel-config.xml");
 	//Excel配置文件中配置的id

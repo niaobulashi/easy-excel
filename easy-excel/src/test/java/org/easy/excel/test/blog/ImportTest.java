@@ -5,9 +5,9 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.easy.excel.ExcelContext;
+import org.easy.excel.result.ExcelImportResult;
 import org.easy.excel.test.model.BookModel;
 import org.easy.excel.test.model.StudentModel;
-import org.easy.excel.vo.ExcelImportResult;
 
 public class ImportTest {
 	public static void main(String[] args) throws Exception {
