@@ -18,7 +18,7 @@ public interface CellValueConverter {
 	}
 	
 	/**
-	 * 解析配置中Field元素 处理后的值
+	 * 转换cell的值
 	 * @param bean Excel配置的JavaBean对象
 	 * @param value Excel原值
 	 * @param fieldValue FieldValue信息
@@ -27,5 +27,5 @@ public interface CellValueConverter {
 	 * @return 解析结果对应的value
 	 * @throws Exception
 	 */
-	public Object resolveFieldValue(Object bean,Object value, FieldValue fieldValue, Type type,int rowNum) throws Exception;
+	public Object convert(Object bean,Object value, FieldValue fieldValue, Type type,int rowNum) throws Exception;
 }

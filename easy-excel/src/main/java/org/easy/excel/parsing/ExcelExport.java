@@ -230,7 +230,7 @@ public class ExcelExport extends AbstractExcelResolver{
 			String name = fieldValue.getName();
 			Object value = ReflectUtil.getProperty(bean, name);
 			//从解析器获取值
-			Object val = resolveFieldValue(bean,value, fieldValue, Type.EXPORT,rowNum);
+			Object val = convert(bean,value, fieldValue, Type.EXPORT,rowNum);
 			Cell cell = row.createCell(i);
 			//cell样式是否与标题一致,如果一致,找到对应的标题样式进行设置
 			if(excelDefinition.getEnableStyle()){

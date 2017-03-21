@@ -87,7 +87,7 @@ public abstract class AbstractExcelResolver implements CellValueConverter{
 	
 	//默认实现
 	@Override
-	public Object resolveFieldValue(Object bean,Object value, FieldValue fieldValue, Type type,int rowNum) throws Exception {
+	public Object convert(Object bean,Object value, FieldValue fieldValue, Type type,int rowNum) throws Exception {
 		if(value !=null){
 			//解析器实现，读取数据
 			String convName = fieldValue.getCellValueConverterName();
@@ -150,7 +150,7 @@ public abstract class AbstractExcelResolver implements CellValueConverter{
 					}
 					conv = cellValueConverters.get(convName);
 				}
-				value = conv.resolveFieldValue(bean,value, fieldValue, type, rowNum);
+				value = conv.convert(bean,value, fieldValue, type, rowNum);
 			}
 		}
 		return fieldValue.getDefaultValue();

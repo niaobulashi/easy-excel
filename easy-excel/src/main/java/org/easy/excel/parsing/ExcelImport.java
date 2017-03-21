@@ -137,7 +137,7 @@ public class ExcelImport extends AbstractExcelResolver{
 							//去除前后空格
 							value = value.toString().trim();
 						}
-						value = super.resolveFieldValue(bean,value, fieldValue, Type.IMPORT,rowNum);
+						value = super.convert(bean,value, fieldValue, Type.IMPORT,rowNum);
 						ReflectUtil.setProperty(bean, fieldValue.getName(), value);
 					}
 					break;
