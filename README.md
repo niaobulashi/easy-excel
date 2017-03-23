@@ -98,8 +98,6 @@ public void testExportSimple()throws Exception{
 }
 ```
 
- **不熟悉maven的同学，可以下载jar版本** 
-链接: http://pan.baidu.com/s/1slncm1R 密码: 8j6h
 
 
  **技术交流群** 
