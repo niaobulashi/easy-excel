@@ -35,19 +35,20 @@ public class ExcelImport extends AbstractExcelResolver{
 	 * @param titleIndex 标题索引
 	 * @param excelStream Excel文件流
 	 * @param sheetIndex Sheet索引位置
+	 * @param multivalidate 是否逐条校验，默认单行出错立即抛出ExcelException，为true时为批量校验,可通过ExcelImportResult.hasErrors,和getErrors获取具体错误信息
 	 * @return
 	 * @throws Exception
 	 */
-	public ExcelImportResult readExcel(String id, int titleIndex,InputStream excelStream,Integer sheetIndex) throws Exception {
+	public ExcelImportResult readExcel(String id, int titleIndex,InputStream excelStream,Integer sheetIndex,boolean multivalidate) throws Exception {
 		//从注册信息中获取Bean信息
 		ExcelDefinition excelDefinition = definitionReader.getRegistry().get(id);
 		if(excelDefinition==null){
 			throw new ExcelException("没有找到 ["+id+"] 的配置信息");
 		}
-		return doReadExcel(excelDefinition,titleIndex,excelStream,sheetIndex);
+		return doReadExcel(excelDefinition,titleIndex,excelStream,sheetIndex,multivalidate);
 	}
 	
-	protected ExcelImportResult doReadExcel(ExcelDefinition excelDefinition,int titleIndex,InputStream excelStream,Integer sheetIndex) throws Exception {
+	protected ExcelImportResult doReadExcel(ExcelDefinition excelDefinition,int titleIndex,InputStream excelStream,Integer sheetIndex,boolean multivalidate) throws Exception {
 		Workbook workbook = WorkbookFactory.create(excelStream);
 		ExcelImportResult result = new ExcelImportResult();
 		//读取sheet,sheetIndex参数优先级大于ExcelDefinition配置sheetIndex
@@ -58,7 +59,7 @@ public class ExcelImport extends AbstractExcelResolver{
 		//获取标题
 		List<String> titles = readTitle(excelDefinition,sheet,titleIndex);
 		//获取Bean
-		List<Object> listBean = readRows(excelDefinition,titles, sheet,titleIndex);
+		List<Object> listBean = readRows(result.getErrors(),excelDefinition,titles, sheet,titleIndex,multivalidate);
 		result.setListBean(listBean);
 		return result;
 	}
@@ -90,6 +91,7 @@ public class ExcelImport extends AbstractExcelResolver{
 	
 	/**
 	 * 读取多行
+	 * @param result
 	 * @param excelDefinition
 	 * @param titles
 	 * @param sheet
@@ -98,14 +100,15 @@ public class ExcelImport extends AbstractExcelResolver{
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	protected <T> List<T> readRows(ExcelDefinition excelDefinition, List<String> titles, Sheet sheet,int titleIndex)throws Exception {
+	protected <T> List<T> readRows(List<ExcelError> errors,ExcelDefinition excelDefinition, List<String> titles, Sheet sheet,int titleIndex,boolean multivalidate)throws Exception {
 		int rowNum = sheet.getLastRowNum();
 		//读取数据的总共次数
 		int totalNum = rowNum - titleIndex;
+		int startRow =  -titleIndex;
 		List<T> listBean = new ArrayList<T>(totalNum);
 		for (int i = titleIndex+1; i <= rowNum; i++) {
 			Row row = sheet.getRow(i);
-			Object bean = readRow(excelDefinition,row,titles,i);
+			Object bean = readRow(errors,excelDefinition,row,titles,startRow+i,multivalidate);
 			listBean.add((T) bean);
 		}
 		return listBean;
@@ -120,27 +123,37 @@ public class ExcelImport extends AbstractExcelResolver{
 	 * @return
 	 * @throws Exception
 	 */
-	protected Object readRow(ExcelDefinition excelDefinition, Row row, List<String> titles,int rowNum) throws Exception {
+	protected Object readRow(List<ExcelError> errors,ExcelDefinition excelDefinition, Row row, List<String> titles,int rowNum,boolean multivalidate) throws Exception {
 		//创建注册时配置的bean类型
 		Object bean = ReflectUtil.newInstance(excelDefinition.getClazz());
 		for(FieldValue fieldValue:excelDefinition.getFieldValues()){
 			String title = fieldValue.getTitle();
 			for (int j = 0; j < titles.size(); j++) {
 				if(title.equals(titles.get(j))){
-					Cell cell = row.getCell(j);
-					//获取Excel原生value值
-					Object value = getCellValue(cell);
-					//校验
-					validate(fieldValue, value, rowNum);
-					if(value != null){
-						if(value instanceof String){
-							//去除前后空格
-							value = value.toString().trim();
+					try{
+						Cell cell = row.getCell(j);
+						//获取Excel原生value值
+						Object value = getCellValue(cell);
+						//校验
+						validate(fieldValue, value, rowNum);
+						if(value != null){
+							if(value instanceof String){
+								//去除前后空格
+								value = value.toString().trim();
+							}
+							value = super.convert(bean,value, fieldValue, Type.IMPORT,rowNum);
+							ReflectUtil.setProperty(bean, fieldValue.getName(), value);
 						}
-						value = super.convert(bean,value, fieldValue, Type.IMPORT,rowNum);
-						ReflectUtil.setProperty(bean, fieldValue.getName(), value);
+						break;
+					}catch(ExcelException e){
+						//应用multivalidate
+						if(multivalidate){
+							errors.add(new ExcelError(rowNum,e.getMessage()));
+							continue;
+						}else{
+							throw e;
+						}
 					}
-					break;
 				}
 			}
 		}
