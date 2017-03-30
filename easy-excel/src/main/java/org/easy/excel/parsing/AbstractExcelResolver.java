@@ -40,9 +40,11 @@ public abstract class AbstractExcelResolver implements CellValueConverter{
 	 * 
 	 * @param value
 	 * @param format
+	 * @param fieldValue
+	 * @param rowNum
 	 * @return
 	 */
-	protected String resolverExpression(String value, String format, Type type) {
+	protected String resolverExpression(String value, String format, Type type,FieldValue fieldValue,int rowNum) {
 		try {
 			String[] expressions = StringUtils.split(format, ",");
 			for (String expression : expressions) {
@@ -60,9 +62,9 @@ public abstract class AbstractExcelResolver implements CellValueConverter{
 				}
 			}
 		} catch (Exception e) {
-			throw new ExcelException("表达式:" + format + "错误,正确的格式应该以[,]号分割,[:]号取值");
+			throw new ExcelException(getErrorMsg(fieldValue, "表达式:" + format + "错误,正确的格式应该以[,]号分割,[:]号取值", rowNum));
 		}
-		return value;
+		throw new ExcelException(getErrorMsg(fieldValue, "["+value+"]取值错误", rowNum));
 	}
 
 	/**
@@ -119,11 +121,11 @@ public abstract class AbstractExcelResolver implements CellValueConverter{
 							Number val = (Number) value;
 							return new Date(val.longValue());
 						} else {
-							throw new ExcelException("数据格式错误,[ " + name + " ]的类型是:" + value.getClass()+",无法转换成日期");
+							throw new ExcelException(getErrorMsg(fieldValue, "数据格式错误,[ " + name + " ]的类型是:" + value.getClass()+",无法转换成日期", rowNum));
 						}
 					}
 				} else if (format != null) {
-					return resolverExpression(value.toString(), format, type);
+					return resolverExpression(value.toString(), format, type,fieldValue,rowNum);
 				} else if (decimalFormat!=null) {
 					if (Type.IMPORT == type) {
 						if(value instanceof String){
