@@ -32,7 +32,7 @@
 		<field name="createUser" title="创建人"/>
 		<!-- 复杂对象 -->
 		<field name="book.bookName" title="图书名称" />
-		<field name="book.author.authorName" title="作者名称"/>
+		<field name="book.author.authorName" title="作者名称" isNull="false"/>
 	</excel>
 	<!-- ExcelXmlBuilder 生成的配置文件 -->
 	<excel id="student3" class="org.easy.excel.test.model.StudentModel" sheetname="学生信息列表" defaultColumnWidth="5000" enableStyle="true">
