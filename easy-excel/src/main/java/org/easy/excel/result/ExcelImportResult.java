@@ -1,6 +1,10 @@
 package org.easy.excel.result;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.easy.excel.parsing.ExcelError;
 
 /**
  * Excel导入结果
@@ -15,7 +19,10 @@ public class ExcelImportResult {
 
 	/** JavaBean集合,从标题行下面解析的数据 */
 	private List<?> listBean;
-
+	
+	/** Errors */
+	private List<ExcelError> errors = new ArrayList<ExcelError>();
+	
 	public List<List<Object>> getHeader() {
 		return header;
 	}
@@ -23,7 +30,7 @@ public class ExcelImportResult {
 	public void setHeader(List<List<Object>> header) {
 		this.header = header;
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public <T> List<T> getListBean() {
 		return (List<T>) listBean;
@@ -32,5 +39,17 @@ public class ExcelImportResult {
 	public void setListBean(List<?> listBean) {
 		this.listBean = listBean;
 	}
-
+	
+	public List<ExcelError> getErrors() {
+		return errors;
+	}
+	
+	/**
+	 * 导入是否含有错误
+	 * @return true:有错误,false:没有错误
+	 */
+	public boolean hasErrors(){
+		return CollectionUtils.isNotEmpty(errors);
+	}
+	
 }
