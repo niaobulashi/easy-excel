@@ -142,7 +142,7 @@ public class ExcelContext  {
 	 * @throws Exception 
 	 */
 	public ExcelImportResult readExcel(String id, InputStream excelStream) throws Exception {
-		return excelImport.readExcel(id,0, excelStream,null);
+		return excelImport.readExcel(id,0, excelStream,null,false);
 	}
 	
 	/***
@@ -154,7 +154,7 @@ public class ExcelContext  {
 	 * @throws Exception 
 	 */
 	public ExcelImportResult readExcel(String id, InputStream excelStream,int sheetIndex) throws Exception {
-		return excelImport.readExcel(id,0, excelStream,sheetIndex);
+		return excelImport.readExcel(id,0, excelStream,sheetIndex,false);
 	}
 	
 	/***
@@ -166,7 +166,20 @@ public class ExcelContext  {
 	 * @throws Exception 
 	 */
 	public ExcelImportResult readExcel(String id,int titleIndex, InputStream excelStream) throws Exception {
-		return excelImport.readExcel(id,titleIndex, excelStream,null);
+		return excelImport.readExcel(id,titleIndex, excelStream,null,false);
+	}
+	
+	/***
+	 * 读取Excel信息
+	 * @param id 配置ID
+	 * @param titleIndex 标题索引,从0开始
+	 * @param excelStream Excel文件流
+	 * @param multivalidate 是否逐条校验，默认单行出错立即抛出ExcelException，为true时为批量校验,可通过ExcelImportResult.hasErrors,和getErrors获取具体错误信息
+	 * @return ExcelImportResult
+	 * @throws Exception 
+	 */
+	public ExcelImportResult readExcel(String id,int titleIndex, InputStream excelStream,boolean multivalidate) throws Exception {
+		return excelImport.readExcel(id,titleIndex, excelStream,null,multivalidate);
 	}
 	
 	/***
@@ -179,7 +192,21 @@ public class ExcelContext  {
 	 * @throws Exception 
 	 */
 	public ExcelImportResult readExcel(String id,int titleIndex, InputStream excelStream,int sheetIndex) throws Exception {
-		return excelImport.readExcel(id,titleIndex, excelStream,sheetIndex);
+		return excelImport.readExcel(id,titleIndex, excelStream,sheetIndex,false);
+	}
+	
+	/***
+	 * 读取Excel信息
+	 * @param id 配置ID
+	 * @param titleIndex 标题索引,从0开始
+	 * @param excelStream Excel文件流
+	 * @param sheetIndex Sheet索引位
+	 * @param multivalidate 是否逐条校验，默认单行出错立即抛出ExcelException，为true时为批量校验,可通过ExcelImportResult.hasErrors,和getErrors获取具体错误信息
+	 * @return ExcelImportResult
+	 * @throws Exception 
+	 */
+	public ExcelImportResult readExcel(String id,int titleIndex, InputStream excelStream,int sheetIndex,boolean multivalidate) throws Exception {
+		return excelImport.readExcel(id,titleIndex, excelStream,sheetIndex,multivalidate);
 	}
 	
 	/**
