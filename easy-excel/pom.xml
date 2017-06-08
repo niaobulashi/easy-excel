@@ -17,6 +17,7 @@
 	</properties>
 	<build>
 		<plugins>
+			<!-- 打包源码 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -30,6 +31,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- 编译版本 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -37,17 +39,17 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
-					<encoding>${project.build.sourceEncoding}</encoding>  
+					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
-			<plugin>  
-			    <groupId>org.apache.maven.plugins</groupId>  
-			    <artifactId>maven-resources-plugin</artifactId>  
-			    <version>2.4.3</version>  
-			    <configuration>  
-			        <encoding>${project.build.sourceEncoding}</encoding>  
-			    </configuration>  
-			</plugin> 
+			<!-- 跳过测试 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -114,9 +116,9 @@
 			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.springframework</groupId>
-		    <artifactId>spring-webmvc</artifactId>
-		    <version>${spring.version}</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
 		</dependency>
 		<!-- log -->
 		<dependency>
@@ -126,10 +128,10 @@
 		</dependency>
 		<!-- javax servlet api -->
 		<dependency>
-		    <groupId>javax.servlet</groupId>
-		    <artifactId>javax.servlet-api</artifactId>
-		    <version>3.1.0</version>
-		    <scope>provided</scope>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
