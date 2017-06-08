@@ -151,6 +151,7 @@ public class ExcelImport extends AbstractExcelResolver{
 							errors.add(new ExcelError(rowNum,e.getMessage()));
 							continue;
 						}else{
+							errors.add(new ExcelError(rowNum,e.getMessage()));
 							throw e;
 						}
 					}

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.MapUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.easy.excel.config.ExcelDefinition;
 import org.easy.excel.config.FieldValue;
@@ -41,15 +42,39 @@ public class ExcelContext  {
 	 */
 	public ExcelContext(String location) {
 		try {
-			//这里默认使用XML ExcelContent,如果有自己的需求需要自行修改
+			//默认使用XMLExcelDefinitionReader
 			definitionReader = new XMLExcelDefinitionReader(location);
 			excelExport = new ExcelExport(definitionReader);
 			excelImport = new ExcelImport(definitionReader);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		} catch (ExcelException e) {
+			throw e;
+		}catch(Exception e){
+			throw new ExcelException(e);
 		}
 	}
-
+	
+	/**
+	 * @param definitionReader 自定义实现ExcelDefinitionReader
+	 */
+	public ExcelContext (ExcelDefinitionReader definitionReader){
+		try {
+			if(definitionReader==null){
+				throw new ExcelException("definitionReader 不能为空");
+			}
+			if(MapUtils.isEmpty(this.definitionReader.getRegistry())){
+				throw new ExcelException("definitionReader Registry 不能为空");
+			}
+			this.definitionReader = definitionReader;
+			excelExport = new ExcelExport(definitionReader);
+			excelImport = new ExcelImport(definitionReader);
+		}catch(ExcelException e){
+			throw e;
+		}catch (Exception e) {
+			throw new ExcelException(e);
+		}
+		
+	}
+	
 	/**
 	 * 创建Excel
 	 * @param id 配置ID

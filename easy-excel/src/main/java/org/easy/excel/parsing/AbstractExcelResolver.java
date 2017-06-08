@@ -9,12 +9,13 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.easy.excel.ExcelDefinitionReader;
 import org.easy.excel.config.FieldValue;
 import org.easy.excel.exception.ExcelException;
 import org.easy.excel.util.ExcelUtil;
-import org.easy.util.DateUtil;
 import org.easy.util.ReflectUtil;
 import org.easy.util.SpringUtil;
 
@@ -103,10 +104,10 @@ public abstract class AbstractExcelResolver implements CellValueConverter{
 					String [] patterns = StringUtils.split(pattern, ",");
 					if (Type.EXPORT == type) {
 						//导出使用第一个pattern
-						return DateUtil.date2Str((Date) value, patterns[0]);
+						return DateFormatUtils.format((Date) value, patterns[0]);
 					} else if (Type.IMPORT == type) {
 						if (value instanceof String) {
-							Date date = DateUtil.tryStr2Date((String) value, patterns);
+							Date date = DateUtils.parseDate((String) value, patterns);
 							if(date==null){
 								StringBuilder errMsg = new StringBuilder("[");
 								errMsg.append(value.toString()).append("]")
