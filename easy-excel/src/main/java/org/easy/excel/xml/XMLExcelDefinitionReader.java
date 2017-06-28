@@ -40,18 +40,25 @@ public class XMLExcelDefinitionReader implements ExcelDefinitionReader{
 	private Map<String, ExcelDefinition> registry;
 	
 	/** 配置文件路径 */
-	private String location;
+	private String locations;
 	
 	/**
 	 * 
 	 * @param location xml配置路径
 	 * @throws Exception
 	 */
-	public XMLExcelDefinitionReader(String location) throws Exception {
-		this.location = location;
+	public XMLExcelDefinitionReader(String locations) throws Exception {
+		if(StringUtils.isBlank(locations)){
+			throw new IllegalArgumentException("locations 不能为空");
+		}
+		this.locations = locations;
 		registry = new HashMap<String, ExcelDefinition>();
-		Resource resource = new ClassPathResource(location);
-		loadExcelDefinitions(resource.getInputStream());
+		String[] locationArr = StringUtils.split(locations, ",");
+		for (String location:locationArr) {
+			Resource resource = new ClassPathResource(location);
+			loadExcelDefinitions(resource.getInputStream());
+		}
+		
 	}
 	
 	/**
@@ -90,18 +97,18 @@ public class XMLExcelDefinitionReader implements ExcelDefinitionReader{
 	protected void processExcelDefinition(Element ele) {
 		ExcelDefinition excelDefinition = new ExcelDefinition();
 		String id = ele.getAttribute("id");
-		Validate.notNull(id, "Excel 配置文件[" + location + "] , id为 [ null ] ");
+		Validate.notNull(id, "Excel 配置文件[" + locations + "] , id为 [ null ] ");
 		if (registry.containsKey(id)) {
-			throw new ExcelException("Excel 配置文件[" + location + "] , id为 [" + id + "] 的不止一个");
+			throw new ExcelException("Excel 配置文件[" + locations + "] , id为 [" + id + "] 的不止一个");
 		}
 		excelDefinition.setId(id);
 		String className = ele.getAttribute("class");
-		Validate.notNull(className, "Excel 配置文件[" + location + "] , id为 [" + id + "] 的 class 为 [ null ]");
+		Validate.notNull(className, "Excel 配置文件[" + locations + "] , id为 [" + id + "] 的 class 为 [ null ]");
 		Class<?> clazz = null;
 		try {
 			clazz = Class.forName(className);
 		} catch (ClassNotFoundException e) {
-			throw new ExcelException("Excel 配置文件[" + location + "] , id为 [" + id + "] 的 class 为 [" + className + "] 类不存在 ");
+			throw new ExcelException("Excel 配置文件[" + locations + "] , id为 [" + id + "] 的 class 为 [" + className + "] 类不存在 ");
 		}
 		excelDefinition.setClassName(className);
 		excelDefinition.setClazz(clazz);
@@ -109,7 +116,7 @@ public class XMLExcelDefinitionReader implements ExcelDefinitionReader{
 			try{
 				excelDefinition.setDefaultColumnWidth(Integer.parseInt(ele.getAttribute("defaultColumnWidth")));
 			}catch(NumberFormatException e){
-				throw new ExcelException("Excel 配置文件[" + location + "] , id为 [ " + excelDefinition.getId()
+				throw new ExcelException("Excel 配置文件[" + locations + "] , id为 [ " + excelDefinition.getId()
 				+ " ] 的 defaultColumnWidth 属性不能为 [ "+ele.getAttribute("defaultColumnWidth")+" ],只能为int类型");
 			}
 		}
@@ -127,7 +134,7 @@ public class XMLExcelDefinitionReader implements ExcelDefinitionReader{
 				short constValue = ReflectUtil.getConstValue(CellStyle.class, "ALIGN_"+defaultAlign.toUpperCase());
 				excelDefinition.setDefaultAlign(constValue);
 			}catch(Exception e){
-				throw new ExcelException("Excel 配置文件[" + location + "] , id为 [ " + excelDefinition.getId()
+				throw new ExcelException("Excel 配置文件[" + locations + "] , id为 [ " + excelDefinition.getId()
 				+ " ] 的 defaultAlign 属性不能为 [ "+defaultAlign+" ],目前支持的left,center,right");
 			}
 		}
@@ -136,12 +143,12 @@ public class XMLExcelDefinitionReader implements ExcelDefinitionReader{
 			try{
 				int sheetIndex = Integer.parseInt(ele.getAttribute("sheetIndex"));
 				if(sheetIndex<0){
-					throw new ExcelException("Excel 配置文件[" + location + "] , id为 [ " + excelDefinition.getId()
+					throw new ExcelException("Excel 配置文件[" + locations + "] , id为 [ " + excelDefinition.getId()
 					+ " ] 的 sheetIndex 属性不能为 [ "+ele.getAttribute("sheetIndex")+" ],索引位置至少从0开始");
 				}
 				excelDefinition.setSheetIndex(sheetIndex);
 			}catch(NumberFormatException e){
-				throw new ExcelException("Excel 配置文件[" + location + "] , id为 [ " + excelDefinition.getId()
+				throw new ExcelException("Excel 配置文件[" + locations + "] , id为 [ " + excelDefinition.getId()
 				+ " ] 的 sheetIndex 属性不能为 [ "+ele.getAttribute("sheetIndex")+" ],只能为int类型");
 			}
 		}
@@ -163,11 +170,11 @@ public class XMLExcelDefinitionReader implements ExcelDefinitionReader{
 					FieldValue fieldValue = new FieldValue();
 					Element fieldEle = (Element) node;
 					String name = fieldEle.getAttribute("name");
-					Validate.isTrue(StringUtils.isNotBlank(name), "Excel 配置文件[" + location + "] , id为 [ " + excelDefinition.getId()
+					Validate.isTrue(StringUtils.isNotBlank(name), "Excel 配置文件[" + locations + "] , id为 [ " + excelDefinition.getId()
 							+ " ] 的 name 属性不能为 [ null ]");
 					fieldValue.setName(name);
 					String title = fieldEle.getAttribute("title");
-					Assert.isTrue(StringUtils.isNotBlank(title), "Excel 配置文件[" + location + "] , id为 [ " + excelDefinition.getId()
+					Assert.isTrue(StringUtils.isNotBlank(title), "Excel 配置文件[" + locations + "] , id为 [ " + excelDefinition.getId()
 							+ " ] 的 title 属性不能为 [ null ]");
 					fieldValue.setTitle(title);
 					String pattern = fieldEle.getAttribute("pattern");
@@ -198,7 +205,7 @@ public class XMLExcelDefinitionReader implements ExcelDefinitionReader{
 							short constValue = ReflectUtil.getConstValue(CellStyle.class, "ALIGN_"+align.toUpperCase());
 							fieldValue.setAlign(constValue);
 						}catch(Exception e){
-							throw new ExcelException("Excel 配置文件[" + location + "] , id为 [ " + excelDefinition.getId()
+							throw new ExcelException("Excel 配置文件[" + locations + "] , id为 [ " + excelDefinition.getId()
 							+ " ] 的 align 属性不能为 [ "+align+" ],目前支持的left,center,right");
 						}
 					}
@@ -209,7 +216,7 @@ public class XMLExcelDefinitionReader implements ExcelDefinitionReader{
 							int intVal = Integer.parseInt(columnWidth);
 							fieldValue.setColumnWidth(intVal);
 						}catch(NumberFormatException e){
-							throw new ExcelException("Excel 配置文件[" + location + "] , id为 [ " + excelDefinition.getId()
+							throw new ExcelException("Excel 配置文件[" + locations + "] , id为 [ " + excelDefinition.getId()
 							+ " ] 的 columnWidth 属性 [ "+columnWidth+" ] 不是一个合法的数值");
 						}
 					}
@@ -221,7 +228,7 @@ public class XMLExcelDefinitionReader implements ExcelDefinitionReader{
 							IndexedColors color = ReflectUtil.getConstValue(IndexedColors.class,titleBgColor.toUpperCase());
 							fieldValue.setTitleBgColor(color.index);
 						}catch(Exception e){
-							throw new ExcelException("Excel 配置文件[" + location + "] , id为 [ " + excelDefinition.getId()
+							throw new ExcelException("Excel 配置文件[" + locations + "] , id为 [ " + excelDefinition.getId()
 							+ " ] 的 titleBgColor 属性不能为 [ "+titleBgColor+" ],具体看[org.apache.poi.ss.usermodel.IndexedColors]支持的颜色");
 						}
 					}
@@ -232,7 +239,7 @@ public class XMLExcelDefinitionReader implements ExcelDefinitionReader{
 							//获取cell对齐方式的常量值
 							IndexedColors color = ReflectUtil.getConstValue(IndexedColors.class,titleFountColor.toUpperCase());
 							if(color==null){
-								throw new ExcelException("Excel 配置文件[" + location + "] , id为 [ " + excelDefinition.getId()
+								throw new ExcelException("Excel 配置文件[" + locations + "] , id为 [ " + excelDefinition.getId()
 								+ " ] 的 titleFountColor 属性不能为 [ "+titleFountColor+" ],具体看[org.apache.poi.ss.usermodel.IndexedColors]支持的颜色");
 							}
 							fieldValue.setTitleFountColor(color.index);
@@ -267,7 +274,7 @@ public class XMLExcelDefinitionReader implements ExcelDefinitionReader{
 							//获取roundingMode常量值
 							RoundingMode mode =  ReflectUtil.getConstValue(RoundingMode.class,roundingMode.toUpperCase());
 							if(mode == null){
-								throw new ExcelException("Excel 配置文件[" + location + "] , id为 [ " + excelDefinition.getId()
+								throw new ExcelException("Excel 配置文件[" + locations + "] , id为 [ " + excelDefinition.getId()
 								+ " ] 的 roundingMode 属性不能为 [ "+roundingMode+" ],具体看[java.math.RoundingMode]支持的值");
 							}
 							fieldValue.setRoundingMode(mode);
@@ -284,7 +291,7 @@ public class XMLExcelDefinitionReader implements ExcelDefinitionReader{
 							fieldValue.setDecimalFormat(new DecimalFormat(decimalFormatPattern));
 							fieldValue.getDecimalFormat().setRoundingMode(fieldValue.getRoundingMode());
 						}catch(Exception e){
-							throw new ExcelException("Excel 配置文件[" + location + "] , id为 [ " + excelDefinition.getId()
+							throw new ExcelException("Excel 配置文件[" + locations + "] , id为 [ " + excelDefinition.getId()
 							+ " ] 的 decimalFormatPattern 属性不能为 [ "+decimalFormatPattern+" ],请配置标准的JAVA格式");
 						}
 					}
@@ -315,7 +322,7 @@ public class XMLExcelDefinitionReader implements ExcelDefinitionReader{
 		return Collections.unmodifiableMap(registry);
 	}
 	
-	public String getLocation() {
-		return location;
+	public String getLocations() {
+		return locations;
 	}
 }

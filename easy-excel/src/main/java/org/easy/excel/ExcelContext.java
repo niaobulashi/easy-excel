@@ -40,10 +40,10 @@ public class ExcelContext  {
 	/**
 	 * @param location 配置文件类路径
 	 */
-	public ExcelContext(String location) {
+	public ExcelContext(String locations) {
 		try {
 			//默认使用XMLExcelDefinitionReader
-			definitionReader = new XMLExcelDefinitionReader(location);
+			definitionReader = new XMLExcelDefinitionReader(locations);
 			excelExport = new ExcelExport(definitionReader);
 			excelImport = new ExcelImport(definitionReader);
 		} catch (ExcelException e) {
