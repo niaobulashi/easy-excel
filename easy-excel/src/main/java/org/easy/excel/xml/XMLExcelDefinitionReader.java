@@ -1,6 +1,9 @@
 package org.easy.excel.xml;
 
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -24,6 +27,7 @@ import org.easy.util.ReflectUtil;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
+import org.springframework.util.ResourceUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -47,6 +51,7 @@ public class XMLExcelDefinitionReader implements ExcelDefinitionReader{
 	 * @param location xml配置路径
 	 * @throws Exception
 	 */
+	@SuppressWarnings("resource")
 	public XMLExcelDefinitionReader(String locations) throws Exception {
 		if(StringUtils.isBlank(locations)){
 			throw new IllegalArgumentException("locations 不能为空");
@@ -55,8 +60,16 @@ public class XMLExcelDefinitionReader implements ExcelDefinitionReader{
 		registry = new HashMap<String, ExcelDefinition>();
 		String[] locationArr = StringUtils.split(locations, ",");
 		for (String location:locationArr) {
-			Resource resource = new ClassPathResource(location);
-			loadExcelDefinitions(resource.getInputStream());
+			InputStream fis = null;
+			try{
+				File file = ResourceUtils.getFile(location);
+				fis = new FileInputStream(file);
+			}catch(FileNotFoundException e){
+				//如果没有找到文件,默认尝试从类路径加载
+				Resource resource = new ClassPathResource(location);
+				fis = resource.getInputStream();
+			}
+			loadExcelDefinitions(fis);
 		}
 		
 	}
