@@ -154,6 +154,7 @@ public abstract class AbstractExcelResolver implements CellValueConverter{
 					conv = cellValueConverters.get(convName);
 				}
 				value = conv.convert(bean,value, fieldValue, type, rowNum);
+				return value;
 			}
 		}
 		return fieldValue.getDefaultValue();
