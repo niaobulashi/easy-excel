@@ -41,6 +41,9 @@ public abstract class ExcelUtil {
 		int rows = sheet.getPhysicalNumberOfRows();
 		for (int i = 0; i < rows; i++) {
 			Row row = sheet.getRow(i);
+			if(row==null){
+				continue;
+			}
 			short cellNum = row.getLastCellNum();
 			List<Object> item = new ArrayList<Object>(cellNum);
 			for(int j=0;j<cellNum;j++){
