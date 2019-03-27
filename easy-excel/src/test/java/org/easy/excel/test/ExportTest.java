@@ -33,7 +33,34 @@ public class ExportTest {
 	private static ExcelContext context = new ExcelContext("excel-config.xml");
 	//Excel配置文件中配置的id
 	private static String excelId = "student";
-	
+
+	/***
+	 * 导出测试,自定义头信息
+	 * @throws Exception
+	 */
+	@Test
+	public void testExportCustomHeader()throws Exception{
+		OutputStream ops = new FileOutputStream(path);
+		final List<StudentModel> stus = getStudents();
+		Workbook workbook = context.createExcel(excelId,stus,new ExcelHeader() {
+			@Override
+			public void buildHeader(Sheet sheet, ExcelDefinition excelDefinition, List<?> beans) {
+				Row row1 = sheet.createRow(0);
+				row1.createCell(0).setCellValue("制表人");
+				row1.createCell(1).setCellValue("admin");
+				Row row2 = sheet.createRow(1);
+				row2.createCell(0).setCellValue("制表时间");
+				row2.createCell(1).setCellValue("2019-03-21 11:08:51");
+				Row row3 = sheet.createRow(2);
+				row3.createCell(0).setCellValue("家族信托项目期间管理报告披露频率信息配置表");
+			}
+		});
+		workbook.write(ops);
+		ops.close();
+		workbook.close();
+	}
+
+
 	/***
 	 * 导出测试,分多次导出
 	 * @throws Exception
@@ -44,12 +71,12 @@ public class ExportTest {
 		OutputStream ops = new FileOutputStream(path);
 		ExcelExportResult exportResult = context.createExcelForPart(excelId,getStudents());
 		//假设这是第二次从数据库或其他平台查询到到数据
-		exportResult.append(getStudents());
+		/*exportResult.append(getStudents());
 		//第n次....
 		exportResult.append(getStudents());
 		exportResult.append(getStudents());
 		exportResult.append(getStudents());
-		exportResult.append(getStudents());
+		exportResult.append(getStudents());*/
 
 		Workbook workbook = exportResult.build();
 		workbook.write(ops);
@@ -70,29 +97,7 @@ public class ExportTest {
 		workbook.close();
 	}
 	
-	/***
-	 * 导出测试,自定义头信息
-	 * @throws Exception
-	 */
-	@Test
-	public void testExportCustomHeader()throws Exception{
-		OutputStream ops = new FileOutputStream(path);
-		final List<StudentModel> stus = getStudents();
-		Workbook workbook = context.createExcel(excelId,stus,new ExcelHeader() {
-			@Override
-			public void buildHeader(Sheet sheet, ExcelDefinition excelDefinition, List<?> beans) {
-				Row row1 = sheet.createRow(0);
-				Cell cell = row1.createCell(0);
-				cell.setCellValue("共导出【"+stus.size()+"】条数据");
-				Row row2 = sheet.createRow(1);
-				Cell cell2 = row2.createCell(0);
-				cell2.setCellValue("本次批次号为:XXX");
-			}
-		});
-		workbook.write(ops);
-		ops.close();
-		workbook.close();
-	}
+
 	
 	/***
 	 * 导出测试,指定导出字段
@@ -229,6 +234,7 @@ public class ExportTest {
 			
 			students.add(stu);
 		}
+		System.out.println("students等于：" + students);
 		return students;
 	}
 }

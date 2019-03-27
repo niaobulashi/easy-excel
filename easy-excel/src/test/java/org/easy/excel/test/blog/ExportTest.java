@@ -15,7 +15,7 @@ import org.easy.excel.test.model.StudentModel;
 public class ExportTest {
 	public static void main(String[] args) throws Exception {
 		//准备excel输出流
-		OutputStream ops = new FileOutputStream("C:/Users/Administrator/Desktop/exportStudent.xlsx");
+		OutputStream ops = new FileOutputStream("src/test/resources/exportStudent.xlsx");
 		//创建excel上下文实例,它的构成需要配置文件的路径
 		ExcelContext context = new ExcelContext("excel-config.xml");
 		//获取POI创建结果

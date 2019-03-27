@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excels>
+	<!-- excel标签参看:ExcelDefinition,Field标签参看:FieldValue -->
+	
+	<!-- 测试使用 ,学生类-->
+	<excel id="reveal" class="org.easy.excel.test.model.revealReportModel"
+	sheetname="期间管理报告披露频率信息配置表" enableStyle="true" defaultAlign="center" sheetIndex="0">
+		<field name="id" align="center" titleBgColor="dark_blue" uniformStyle="true" columnWidth="3000" titleFountColor="white" title="序号"/>
+		<field name="projectName" title="项目全称" isNull="false"/>
+		<field name="projectShortName" title="项目简称" align="center" isNull="false"/>
+		<field name="projectSource" title="项目来源" titleFountColor="blue" isNull="false" format="CA:长安信托,YX:宜信财富,MS:民生银行,PA:平安银行,HH:恒辉资管"/>
+		<field name="revealType" columnWidth="4000" title="披露报告类型" isNull="false"/>
+		<field name="revealRate" title="披露频率" titleBgColor="green" format="Q:每季度,H:每半年,Y:每年,TH:每半年(信托),TQ:每季度(信托),TY:每年(信托)" />
+		<field name="revealDueTime" title="披露日期期限"/>
+		<field name="noticeDueTime" title="通知期限"/>
+	</excel>
+
+</excels>

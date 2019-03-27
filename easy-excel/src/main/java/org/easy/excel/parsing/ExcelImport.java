@@ -91,7 +91,6 @@ public class ExcelImport extends AbstractExcelResolver{
 	
 	/**
 	 * 读取多行
-	 * @param result
 	 * @param excelDefinition
 	 * @param titles
 	 * @param sheet
@@ -191,7 +190,7 @@ public class ExcelImport extends AbstractExcelResolver{
 				String err = getErrorMsg(fieldValue, "不能为空", rowNum);
 				throw new ExcelException(err);
 			}
-		}else{
+		} else {
 			//正则校验
 			String regex = fieldValue.getRegex();
 			if(StringUtils.isNotBlank(regex)){

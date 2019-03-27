@@ -141,6 +141,10 @@ public class ExcelExport extends AbstractExcelResolver{
 		}else{
 			sheet = workbook.createSheet();
 		}
+
+		// 锁定sheet加密
+		//sheet.protectSheet("caitc123");
+
 		//创建标题之前,调用buildHeader方法,完成其他数据创建的一些信息
 		if(header!=null){
 			header.buildHeader(sheet,excelDefinition,beans);
@@ -180,6 +184,8 @@ public class ExcelExport extends AbstractExcelResolver{
 			if(excelDefinition.getEnableStyle()){
 				if(fieldValue.getAlign()!=null || fieldValue.getTitleBgColor()!=null || fieldValue.getTitleFountColor() !=null || excelDefinition.getDefaultAlign()!=null){
 					cell.setCellStyle(workbook.createCellStyle());
+					// 设置保护-不锁定
+					//workbook.createCellStyle().setLocked(false);
 					//设置cell 对齐方式
 					setAlignStyle(fieldValue, workbook, cell,excelDefinition);
 					//设置标题背景色
@@ -199,7 +205,7 @@ public class ExcelExport extends AbstractExcelResolver{
 	 * @param sheet
 	 * @param beans
 	 * @param workbook
-	 * @param titleIndex
+	 * @param titleRow
 	 * @throws Exception
 	 */
 	public void createRows(ExcelDefinition excelDefinition,Sheet sheet,List<?> beans,Workbook workbook,Row titleRow) throws Exception{
