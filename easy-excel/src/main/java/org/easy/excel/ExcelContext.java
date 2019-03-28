@@ -105,8 +105,8 @@ public class ExcelContext  {
 	 * @return Workbook
 	 * @throws Exception 
 	 */
-	public Workbook createExcel(String id, List<?> beans,ExcelHeader header) throws Exception {
-		return createExcel(id, beans, header, null);
+	public Workbook createExcel(String id, List<?> beans,ExcelHeader header, Boolean flag) throws Exception {
+		return createExcel(id, beans, header, null, flag);
 	}
 	
 	/**
@@ -127,11 +127,12 @@ public class ExcelContext  {
 	 * @param beans 配置class对应的List
 	 * @param header 导出之前,在标题前面做出一些额外的操作,比如增加文档描述等,可以为null
 	 * @param fields 指定Excel导出的字段(bean对应的字段名称),可以为null
+	 * @param flag 是否设置保护工作簿的保护密码
 	 * @return Workbook
 	 * @throws Exception 
 	 */
-	public Workbook createExcel(String id, List<?> beans,ExcelHeader header,List<String> fields) throws Exception {
-		return excelExport.createExcel(id, beans,header,fields).build();
+	public Workbook createExcel(String id, List<?> beans,ExcelHeader header,List<String> fields, Boolean flag) throws Exception {
+		return excelExport.createExcel(id, beans,header,fields, flag).build();
 	}
 	
 	/**
@@ -144,7 +145,7 @@ public class ExcelContext  {
 	 * @throws Exception 
 	 */
 	public ExcelExportResult createExcelForPart(String id, List<?> beans,ExcelHeader header,List<String> fields) throws Exception {
-		return excelExport.createExcel(id, beans,header,fields);
+		return excelExport.createExcel(id, beans,header,fields, null);
 	}
 	
 	/**

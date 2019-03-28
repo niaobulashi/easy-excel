@@ -54,7 +54,7 @@ public class ExportTest {
 				Row row3 = sheet.createRow(2);
 				row3.createCell(0).setCellValue("家族信托项目期间管理报告披露频率信息配置表");
 			}
-		});
+		}, Boolean.FALSE);
 		workbook.write(ops);
 		ops.close();
 		workbook.close();
@@ -113,7 +113,7 @@ public class ExportTest {
 		specifyFields.add("name");
 		specifyFields.add("id");
 		List<StudentModel> stus = getStudents();
-		Workbook workbook = context.createExcel(excelId,stus,null,specifyFields);
+		Workbook workbook = context.createExcel(excelId,stus,null, specifyFields, Boolean.FALSE);
 		workbook.write(ops);
 		ops.close();
 		workbook.close();
@@ -144,7 +144,7 @@ public class ExportTest {
 				Cell cell2 = row2.createCell(0);
 				cell2.setCellValue("本次批次号为:XXX");
 			}
-		},specifyFields);
+		},specifyFields, Boolean.FALSE);
 		workbook.write(ops);
 		ops.close();
 		workbook.close();

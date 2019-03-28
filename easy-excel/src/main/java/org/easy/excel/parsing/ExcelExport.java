@@ -11,12 +11,15 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.easy.excel.ExcelDefinitionReader;
 import org.easy.excel.config.ExcelDefinition;
 import org.easy.excel.config.FieldValue;
 import org.easy.excel.exception.ExcelException;
 import org.easy.excel.result.ExcelExportResult;
 import org.easy.util.ReflectUtil;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTSheetProtection;
 import org.springframework.util.TypeUtils;
 
 /**
@@ -40,9 +43,10 @@ public class ExcelExport extends AbstractExcelResolver{
 	 * @return
 	 * @throws Exception
 	 */
-	public ExcelExportResult createExcel(String id,List<?> beans,ExcelHeader header,List<String> fields) throws Exception{
+	public ExcelExportResult createExcel(String id,List<?> beans,ExcelHeader header,List<String> fields, Boolean flag) throws Exception{
 		ExcelExportResult exportResult = null;
-		if(CollectionUtils.isNotEmpty(beans)){
+
+		if (CollectionUtils.isNotEmpty(beans)) {
 			//从注册信息中获取Bean信息
 			ExcelDefinition excelDefinition = definitionReader.getRegistry().get(id);
 			if(excelDefinition==null){
@@ -51,25 +55,26 @@ public class ExcelExport extends AbstractExcelResolver{
 			//实际传入的bean类型
 			Class<?> realClass = beans.get(0).getClass();
 			//传入的类型是excel配置class的类型,或者是它的子类,直接进行生成
-			if(realClass==excelDefinition.getClazz() || TypeUtils.isAssignable(excelDefinition.getClazz(),realClass)){
+			if (realClass==excelDefinition.getClazz() || TypeUtils.isAssignable(excelDefinition.getClazz(),realClass)) {
 				//导出指定字段的标题不是null,动态创建,Excel定义
 				excelDefinition = dynamicCreateExcelDefinition(excelDefinition,fields);
 			}
 			//传入的类型是excel配置class的类型的父类,那么进行向上转型,只获取配置中父类存在的属性
-			else if(TypeUtils.isAssignable(realClass,excelDefinition.getClazz())){
+			else if (TypeUtils.isAssignable(realClass,excelDefinition.getClazz())) {
 				excelDefinition = extractSuperClassFields(excelDefinition, fields, realClass);
-			}else{
+			} else {
 				//判断传入的集合与配置文件中的类型拥有共同的父类,如果有则向上转型
 				Object superClass = ReflectUtil.getEqSuperClass(realClass, excelDefinition.getClazz());
-				if(superClass!=Object.class){
+				if (superClass!=Object.class) {
 					excelDefinition = extractSuperClassFields(excelDefinition, fields, realClass);
-				}else{
+				} else {
 					throw new ExcelException("传入的参数类型是:"+beans.get(0).getClass().getName()
 							+"但是 配置文件的类型是: "+excelDefinition.getClazz().getName()+",参数既不是父类,也不是其相同父类下的子类,无法完成转换");
 				}
 				
 			}
-			exportResult = doCreateExcel(excelDefinition,beans,header);
+			// 创建Excel
+			exportResult = doCreateExcel(excelDefinition, beans, header, flag);
 		}
 		return exportResult;
 	}
@@ -89,7 +94,7 @@ public class ExcelExport extends AbstractExcelResolver{
 			throw new ExcelException("没有找到 ["+id+"] 的配置信息");
 		}
 		excelDefinition = dynamicCreateExcelDefinition(excelDefinition,fields);
-		return doCreateExcel(excelDefinition, null, header).build();
+		return doCreateExcel(excelDefinition, null, header, null).build();
 	}
 	
 	//抽取父类拥用的字段,同时从它的基础只上在进行筛选指定的字段
@@ -132,10 +137,11 @@ public class ExcelExport extends AbstractExcelResolver{
 		
 	}
 
-	protected ExcelExportResult doCreateExcel(ExcelDefinition excelDefinition, List<?> beans,ExcelHeader header) throws Exception {
+	// 创建Excel
+	protected ExcelExportResult doCreateExcel(ExcelDefinition excelDefinition, List<?> beans,ExcelHeader header, Boolean flag) throws Exception {
 		// 创建Workbook
-		Workbook workbook = new SXSSFWorkbook();
-		Sheet sheet = null;
+		XSSFWorkbook workbook = new XSSFWorkbook();
+		XSSFSheet sheet = null;
 		if(excelDefinition.getSheetname()!=null){
 			sheet = workbook.createSheet(excelDefinition.getSheetname());
 		}else{
@@ -143,17 +149,21 @@ public class ExcelExport extends AbstractExcelResolver{
 		}
 
 		// 锁定sheet加密
-		//sheet.protectSheet("caitc123");
+		if (flag != null && flag) {
+			sheet.protectSheet("caitc123");
+		}
 
 		//创建标题之前,调用buildHeader方法,完成其他数据创建的一些信息
 		if(header!=null){
 			header.buildHeader(sheet,excelDefinition,beans);
 		}
-		
-		Row titleRow = createTitle(excelDefinition,sheet,workbook);
+
+		// 创建title标题
+		Row titleRow = createTitle(excelDefinition, sheet, workbook);
 		//如果listBean不为空,创建数据行
 		if(beans!=null){
-			createRows(excelDefinition, sheet, beans,workbook,titleRow);
+			// 创建数据行
+			createRows(excelDefinition, sheet, beans, workbook, titleRow);
 		}
 		ExcelExportResult exportResult = new ExcelExportResult(excelDefinition, sheet, workbook, titleRow,this);
 		return exportResult;
@@ -184,14 +194,16 @@ public class ExcelExport extends AbstractExcelResolver{
 			if(excelDefinition.getEnableStyle()){
 				if(fieldValue.getAlign()!=null || fieldValue.getTitleBgColor()!=null || fieldValue.getTitleFountColor() !=null || excelDefinition.getDefaultAlign()!=null){
 					cell.setCellStyle(workbook.createCellStyle());
-					// 设置保护-不锁定
-					//workbook.createCellStyle().setLocked(false);
+
 					//设置cell 对齐方式
 					setAlignStyle(fieldValue, workbook, cell,excelDefinition);
 					//设置标题背景色
 					setTitleBgColorStyle(fieldValue, workbook, cell);
 					//设置标题字体色
 					setTitleFountColorStyle(fieldValue, workbook, cell);
+
+					// 设置单元格不锁定样式
+					workbook.createCellStyle().setLocked(false);
 				}
 			}
 			setCellValue(cell,fieldValue.getTitle());
@@ -283,6 +295,33 @@ public class ExcelExport extends AbstractExcelResolver{
 			cellStyle.setFont(font);
 		}
 	}
-	
-	
+
+	// 重写Poi的projectSheet方法
+	public void protectSheet(XSSFSheet workSheet, String password) {
+		if (password != null) {
+			// 定义工作表中的允许用户操作权限设置
+			CTSheetProtection sheetProtection = safeGetProtectionField(workSheet);
+			workSheet.setSheetPassword(password, null);
+			sheetProtection.setSheet(true);
+			sheetProtection.setScenarios(true);
+			sheetProtection.setObjects(true);
+			sheetProtection.setInsertRows(true);
+			sheetProtection.setSelectLockedCells(false);
+			sheetProtection.setSelectUnlockedCells(false);
+			sheetProtection.setFormatCells(false);
+			sheetProtection.setFormatColumns(false);
+			sheetProtection.setFormatRows(false);
+			sheetProtection.setDeleteColumns(false);
+			sheetProtection.setSort(false);
+			sheetProtection.setAutoFilter(false);
+		} else {
+			workSheet.getCTWorksheet().unsetSheetProtection();
+		}
+
+	}
+
+	// 定义工作表中的允许用户操作权限设置
+	private CTSheetProtection safeGetProtectionField(XSSFSheet workSheet) {
+		return !workSheet.getCTWorksheet().isSetSheetProtection() ? workSheet.getCTWorksheet().addNewSheetProtection() : workSheet.getCTWorksheet().getSheetProtection();
+	}
 }
