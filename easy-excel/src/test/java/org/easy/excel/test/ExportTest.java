@@ -28,7 +28,7 @@ import org.junit.Test;
 public class ExportTest {
 	
 	//测试时文件磁盘路径
-	private static String path = "src/test/resources/test-export-excel.xlsx";
+	private static String path = "src/test/resources/test-export-student.xlsx";
 	//配置文件路径
 	private static ExcelContext context = new ExcelContext("template/excel-config.xml");
 	//Excel配置文件中配置的id

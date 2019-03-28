@@ -44,6 +44,7 @@ public class ExcelExport extends AbstractExcelResolver{
 	 * @throws Exception
 	 */
 	public ExcelExportResult createExcel(String id,List<?> beans,ExcelHeader header,List<String> fields, Boolean flag) throws Exception{
+		// 定义导出结果
 		ExcelExportResult exportResult = null;
 
 		if (CollectionUtils.isNotEmpty(beans)) {
@@ -156,9 +157,12 @@ public class ExcelExport extends AbstractExcelResolver{
 			protectSheet(sheet);
 		}
 
+		// 冻结前4行
+        sheet.createFreezePane(0,4);
+
 		//创建标题之前,调用buildHeader方法,完成其他数据创建的一些信息
 		if(header!=null){
-			header.buildHeader(sheet,excelDefinition,beans);
+			header.buildHeader(sheet, excelDefinition, beans);
 		}
 
 		// 创建title标题
@@ -209,7 +213,8 @@ public class ExcelExport extends AbstractExcelResolver{
 					cell.getCellStyle().setLocked(false);
 				}
 			}
-			setCellValue(cell,fieldValue.getTitle());
+			// 最后将数据存放
+			setCellValue(cell, fieldValue.getTitle());
 		}
 		return titleRow;
 	}

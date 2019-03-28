@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <excels>
-	<!-- excel标签参看:ExcelDefinition,Field标签参看:FieldValue -->
-	
-	<!-- 测试使用 ,学生类-->
-	<excel id="reveal" class="org.easy.excel.test.model.revealReportModel"
-	sheetname="期间管理报告披露频率信息配置表" enableStyle="true" defaultAlign="center" sheetIndex="0">
-		<field name="id" align="center" titleBgColor="dark_blue" columnWidth="3000" titleFountColor="white" title="序号" uniformStyle="true"/>
-		<field name="projectName" title="项目全称" isNull="false" uniformStyle="true"/>
-		<field name="projectShortName" title="项目简称" align="center" isNull="false" uniformStyle="true"/>
-		<field name="projectSource" title="项目来源" titleFountColor="blue" isNull="false" format="CA:长安信托,YX:宜信财富,MS:民生银行,PA:平安银行,HH:恒辉资管" uniformStyle="true"/>
-		<field name="revealType" columnWidth="4000" title="披露报告类型" isNull="false" uniformStyle="true"/>
-		<field name="revealRate" title="披露频率" titleBgColor="green" format="Q:每季度,H:每半年,Y:每年,TH:每半年(信托),TQ:每季度(信托),TY:每年(信托)" uniformStyle="true"/>
-		<field name="revealDueTime" title="披露日期期限" uniformStyle="true"/>
-		<field name="noticeDueTime" title="通知期限" uniformStyle="true"/>
-	</excel>
+    <!-- excel标签参看:ExcelDefinition,Field标签参看:FieldValue -->
+
+    <!-- 测试使用 ,学生类-->
+    <excel id="reveal" class="org.easy.excel.test.model.revealReportModel"
+           sheetname="期间管理报告披露频率信息配置表" enableStyle="true" defaultAlign="center" sheetIndex="0">
+        <field name="id" title="序号" align="center" columnWidth="3000" uniformStyle="true"/>
+        <field name="projectName" title="项目全称" align="left" columnWidth="13000" isNull="false" uniformStyle="true"/>
+        <field name="projectShortName" title="项目简称" align="left" columnWidth="8000" isNull="false" uniformStyle="true"/>
+        <field name="projectSource" title="项目来源" align="center" columnWidth="8200" isNull="false" format="CA:长安信托,YX:宜信财富,MS:民生银行,PA:平安银行,HH:恒辉资管" uniformStyle="true"/>
+        <field name="revealType" title="披露报告类型" align="center" columnWidth="4000" isNull="false" uniformStyle="true"/>
+        <field name="revealRate" title="披露频率" align="center" columnWidth="10000" format="Q:每季度,H:每半年,Y:每年,TH:每半年(信托),TQ:每季度(信托),TY:每年(信托)" uniformStyle="true"/>
+        <field name="revealDueTime" title="披露日期期限" align="center" columnWidth="4000" uniformStyle="true"/>
+        <field name="noticeDueTime" title="通知期限" align="center" columnWidth="4000" uniformStyle="true"/>
+    </excel>
 
 </excels>

@@ -1,9 +1,8 @@
 package org.easy.excel.test;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import com.sun.prism.paint.Color;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.ss.usermodel.*;
 import org.easy.excel.ExcelContext;
 import org.easy.excel.config.ExcelDefinition;
 import org.easy.excel.config.FieldValue;
@@ -53,9 +52,16 @@ public class ExportRevealTest {
 				row2.createCell(0).setCellValue("制表时间");
 				row2.createCell(1).setCellValue("2019-03-21 11:08:51");
 				Row row3 = sheet.createRow(2);
+				short s = 1200;
+				// 设置高度
+				row3.setHeight(s);
 				row3.createCell(0).setCellValue("家族信托项目期间管理报告披露频率信息配置表");
+				// 设置该单元格自动换行,这段代码不生效啊啊
+				row3.createCell(3).getCellStyle().setWrapText(true);
+				row3.createCell(3).setCellValue("项目来源只能填写以下数据：\r\n长安信托，平安银行，民生银行，\r\n宜信财富，恒辉资管");
+				row3.createCell(5).setCellValue("披露频率只能填写以下数据：每季度，\r\n每半年，每年，每季度(信托)，\r\n每半年(信托)，每年(信托)");
 			}
-		}, Boolean.TRUE);
+		}, Boolean.FALSE);
 		workbook.write(ops);
 		ops.close();
 		workbook.close();
