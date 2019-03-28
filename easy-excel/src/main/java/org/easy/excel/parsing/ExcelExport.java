@@ -150,7 +150,10 @@ public class ExcelExport extends AbstractExcelResolver{
 
 		// 锁定sheet加密
 		if (flag != null && flag) {
+			// 对sheet工作簿进行保护加密处理
 			sheet.protectSheet("caitc123");
+			// 控制某些属性可以对用户开放
+			protectSheet(sheet);
 		}
 
 		//创建标题之前,调用buildHeader方法,完成其他数据创建的一些信息
@@ -203,7 +206,7 @@ public class ExcelExport extends AbstractExcelResolver{
 					setTitleFountColorStyle(fieldValue, workbook, cell);
 
 					// 设置单元格不锁定样式
-					workbook.createCellStyle().setLocked(false);
+					cell.getCellStyle().setLocked(false);
 				}
 			}
 			setCellValue(cell,fieldValue.getTitle());
@@ -297,31 +300,19 @@ public class ExcelExport extends AbstractExcelResolver{
 	}
 
 	// 重写Poi的projectSheet方法
-	public void protectSheet(XSSFSheet workSheet, String password) {
-		if (password != null) {
-			// 定义工作表中的允许用户操作权限设置
-			CTSheetProtection sheetProtection = safeGetProtectionField(workSheet);
-			workSheet.setSheetPassword(password, null);
-			sheetProtection.setSheet(true);
-			sheetProtection.setScenarios(true);
-			sheetProtection.setObjects(true);
-			sheetProtection.setInsertRows(true);
-			sheetProtection.setSelectLockedCells(false);
-			sheetProtection.setSelectUnlockedCells(false);
-			sheetProtection.setFormatCells(false);
-			sheetProtection.setFormatColumns(false);
-			sheetProtection.setFormatRows(false);
-			sheetProtection.setDeleteColumns(false);
-			sheetProtection.setSort(false);
-			sheetProtection.setAutoFilter(false);
-		} else {
-			workSheet.getCTWorksheet().unsetSheetProtection();
-		}
-
+	public void protectSheet(XSSFSheet workSheet) {
+		// 定义工作表中的允许用户操作权限设置
+		CTSheetProtection sheetProtection = safeGetProtectionField(workSheet);
+		sheetProtection.setInsertRows(false);
+		sheetProtection.setSelectLockedCells(false);
+		sheetProtection.setSelectUnlockedCells(false);
 	}
 
 	// 定义工作表中的允许用户操作权限设置
 	private CTSheetProtection safeGetProtectionField(XSSFSheet workSheet) {
-		return !workSheet.getCTWorksheet().isSetSheetProtection() ? workSheet.getCTWorksheet().addNewSheetProtection() : workSheet.getCTWorksheet().getSheetProtection();
+		if (!workSheet.getCTWorksheet().isSetSheetProtection()) {
+			return workSheet.getCTWorksheet().addNewSheetProtection();
+		}
+		return workSheet.getCTWorksheet().getSheetProtection();
 	}
 }
