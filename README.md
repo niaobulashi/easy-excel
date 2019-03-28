@@ -1,8 +1,5 @@
  **#easy-excel** 
 
- **使用介绍** 
-http://my.oschina.net/lis1314/blog/693989
-
  **
 关于与Spring集成只需要加入下面配置** 
 
@@ -97,9 +94,3 @@ public void testExportSimple()throws Exception{
 	workbook.close();
 }
 ```
-
-
-
- **技术交流群** 
-
- **489137933** 
