@@ -17,7 +17,7 @@ public class ExportTest {
 		//准备excel输出流
 		OutputStream ops = new FileOutputStream("src/test/resources/exportStudent.xlsx");
 		//创建excel上下文实例,它的构成需要配置文件的路径
-		ExcelContext context = new ExcelContext("excel-config.xml");
+		ExcelContext context = new ExcelContext("template/excel-config.xml");
 		//获取POI创建结果
 		Workbook workbook = context.createExcel("student",getStudents());
 		workbook.write(ops);

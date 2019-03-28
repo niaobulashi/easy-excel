@@ -18,7 +18,7 @@ public class ImportRevealTest {
 	// 测试时文件磁盘路径
 	private static String path = "test-export-reveal.xlsx";
 	// 配置文件路径
-	private static ExcelContext revealContext = new ExcelContext("raveal-config.xml");
+	private static ExcelContext revealContext = new ExcelContext("template/raveal-config.xml");
 	// Excel配置文件中配置的id
 	private static String revealExcelId = "reveal";
 

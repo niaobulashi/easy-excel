@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.easy.excel.ExcelContext;
 import org.easy.excel.result.ExcelImportResult;
-import org.easy.excel.test.model.BookModel;
 import org.easy.excel.test.model.StudentModel;
 
 public class ImportTest {
@@ -14,7 +13,7 @@ public class ImportTest {
 		//准备excel文件流
 		InputStream excelStream = new FileInputStream("C:/Users/Administrator/Desktop/stu.xlsx");
 		//创建excel上下文实例,它的构成需要配置文件的路径
-		ExcelContext context = new ExcelContext("excel-config.xml");
+		ExcelContext context = new ExcelContext("template/excel-config.xml");
 		//按照xml配置中id为student的配置形式读取excel文件,并转换成StudentModel
 		//这里的第二个参数是值,标题是第几行开始,之前也说了标题之前的数据并不是规则的数据
 		ExcelImportResult result = context.readExcel("student", 2,excelStream);
