@@ -38,7 +38,7 @@ public class ExcelContext  {
 	private ExcelImport excelImport;
 	
 	/**
-	 * @param location 配置文件类路径
+	 * @param locations 配置文件类路径
 	 */
 	public ExcelContext(String locations) {
 		try {
@@ -102,6 +102,7 @@ public class ExcelContext  {
 	 * @param id 配置ID
 	 * @param beans 配置class对应的List
 	 * @param header 导出之前,在标题前面做出一些额外的操作，比如增加文档描述等,可以为null
+	 * @param flag 为true时，表示设置了密码，默认密码为niaobulashi
 	 * @return Workbook
 	 * @throws Exception 
 	 */

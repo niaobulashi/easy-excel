@@ -42,6 +42,7 @@ public class ExportRevealTest {
 	public void testExportCustomHeader()throws Exception{
 		OutputStream ops = new FileOutputStream(path);
 		final List<revealReportModel> reveal = getRevealRate();
+		//
 		Workbook workbook = context.createExcel(excelId, reveal, new ExcelHeader() {
 			@Override
 			public void buildHeader(Sheet sheet, ExcelDefinition excelDefinition, List<?> beans) {
@@ -52,16 +53,14 @@ public class ExportRevealTest {
 				row2.createCell(0).setCellValue("制表时间");
 				row2.createCell(1).setCellValue("2019-03-21 11:08:51");
 				Row row3 = sheet.createRow(2);
-				short s = 1200;
-				// 设置高度
-				row3.setHeight(s);
 				row3.createCell(0).setCellValue("家族信托项目期间管理报告披露频率信息配置表");
+
 				// 设置该单元格自动换行,这段代码不生效啊啊
-				row3.createCell(3).getCellStyle().setWrapText(true);
-				row3.createCell(3).setCellValue("项目来源只能填写以下数据：\r\n长安信托，平安银行，民生银行，\r\n宜信财富，恒辉资管");
-				row3.createCell(5).setCellValue("披露频率只能填写以下数据：每季度，\r\n每半年，每年，每季度(信托)，\r\n每半年(信托)，每年(信托)");
+//				row1.createCell(2).getCellStyle().setWrapText(true);
+				row1.createCell(2).setCellValue("项目来源只能填写以下数据：长安信托，平安银行，民生银行，宜信财富，恒辉资管");
+				row2.createCell(2).setCellValue("披露频率只能填写以下数据：每季度，每半年，每年，每季度(信托)，每半年(信托)，每年(信托)");
 			}
-		}, Boolean.FALSE);
+		}, Boolean.TRUE);
 		workbook.write(ops);
 		ops.close();
 		workbook.close();
@@ -77,7 +76,7 @@ public class ExportRevealTest {
 		//需求概述.数据量较大,可能大批量数据导出,会对DB造成压力,这里分批次检索数据,一部分一部分向Excel中写
 		OutputStream ops = new FileOutputStream(path);
 		ExcelExportResult exportResult = context.createExcelForPart(excelId,getStudents());
-		//假设这是第二次从数据库或其他平台查询到到数据
+		//假设这是第二次从excelContext数据库或其他平台查询到到数据
 		/*exportResult.append(getStudents());
 		//第n次....
 		exportResult.append(getStudents());

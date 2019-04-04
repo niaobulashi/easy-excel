@@ -152,7 +152,7 @@ public class ExcelExport extends AbstractExcelResolver{
 		// 锁定sheet加密
 		if (flag != null && flag) {
 			// 对sheet工作簿进行保护加密处理
-			sheet.protectSheet("caitc123");
+			sheet.protectSheet("niaobulashi");
 			// 控制某些属性可以对用户开放
 			protectSheet(sheet);
 		}

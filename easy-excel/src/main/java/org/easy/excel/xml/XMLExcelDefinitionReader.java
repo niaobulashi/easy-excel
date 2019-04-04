@@ -51,7 +51,7 @@ public class XMLExcelDefinitionReader implements ExcelDefinitionReader{
 	 * @param location xml配置路径
 	 * @throws Exception
 	 */
-	@SuppressWarnings("resource")
+	@SuppressWarnings("resources")
 	public XMLExcelDefinitionReader(String locations) throws Exception {
 		if(StringUtils.isBlank(locations)){
 			throw new IllegalArgumentException("locations 不能为空");
