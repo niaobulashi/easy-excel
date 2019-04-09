@@ -1,5 +1,6 @@
 package org.easy.excel.test;
 
+import org.apache.commons.lang.StringUtils;
 import org.easy.excel.ExcelContext;
 import org.easy.excel.parsing.ExcelError;
 import org.easy.excel.result.ExcelImportResult;
@@ -50,11 +51,58 @@ public class ImportRevealTest {
 		//这种方式和上面的没有任何区别,底层方法默认标题索引为0
 		//context.readExcel(excelId, fis);
 	}
-	
-	
+
+
+	/**
+	 * 两个字段相比较
+	 */
 	@Test
-	public void getLastName() {
-		String file = "/upload/file/20190402154130856909.xlsx";
-		System.out.println(file.substring(file.lastIndexOf("."), file.length()));
+	public void Test() {
+		String revealDueTime = null;
+		String revealDueTimeSp = "2";
+		String noticeDueTime = "2";
+		String noticeDueTimeSp = null;
+
+		boolean flag = false;
+		if (StringUtils.isEmpty(revealDueTime)
+				&& StringUtils.isEmpty(revealDueTimeSp)) {
+			flag = true;
+		}
+		if (StringUtils.isEmpty(noticeDueTime)
+				&& StringUtils.isEmpty(noticeDueTimeSp)) {
+			flag = true;
+		}
+		if (StringUtils.isNotEmpty(revealDueTime)
+				&& StringUtils.isNotEmpty(revealDueTimeSp)) {
+			if (revealDueTime.equals(revealDueTimeSp)) {
+				flag = true;
+			} else {
+				flag = false;
+			}
+		} else if ((StringUtils.isNotEmpty(revealDueTime)
+				&& StringUtils.isEmpty(revealDueTimeSp))
+				||(StringUtils.isEmpty(revealDueTime)
+				&& StringUtils.isNotEmpty(revealDueTimeSp))) {
+			flag = false;
+		}
+		if (StringUtils.isNotEmpty(noticeDueTime)
+				&& StringUtils.isNotEmpty(noticeDueTimeSp)) {
+			if (noticeDueTime.equals(noticeDueTimeSp)) {
+				flag = true;
+			} else {
+				flag = false;
+			}
+		} else if ((StringUtils.isNotEmpty(noticeDueTime)
+				&& StringUtils.isEmpty(noticeDueTimeSp))
+				||(StringUtils.isEmpty(noticeDueTime)
+				&& StringUtils.isNotEmpty(noticeDueTimeSp))) {
+			flag = false;
+		}
+
+		if (flag) {
+			System.out.println("相同");
+		} else {
+			System.out.println("不相同");
+		}
 	}
 }
