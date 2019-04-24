@@ -48,7 +48,7 @@ public class XMLExcelDefinitionReader implements ExcelDefinitionReader{
 	
 	/**
 	 * 
-	 * @param location xml配置路径
+	 * @param locations xml配置路径
 	 * @throws Exception
 	 */
 	@SuppressWarnings("resources")
@@ -59,16 +59,9 @@ public class XMLExcelDefinitionReader implements ExcelDefinitionReader{
 		this.locations = locations;
 		registry = new HashMap<String, ExcelDefinition>();
 		String[] locationArr = StringUtils.split(locations, ",");
-		for (String location:locationArr) {
-			InputStream fis = null;
-			try{
-				File file = ResourceUtils.getFile(location);
-				fis = new FileInputStream(file);
-			}catch(FileNotFoundException e){
-				//如果没有找到文件,默认尝试从类路径加载
-				Resource resource = new ClassPathResource(location);
-				fis = resource.getInputStream();
-			}
+		for (String location : locationArr) {
+			// 使用文件流的方式读取文件
+			InputStream fis = this.getClass().getResourceAsStream(location);
 			loadExcelDefinitions(fis);
 		}
 		

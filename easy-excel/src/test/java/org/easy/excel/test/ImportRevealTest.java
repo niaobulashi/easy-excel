@@ -20,7 +20,7 @@ public class ImportRevealTest {
 	// 测试时文件磁盘路径
 	private static String path = "test-export-reveal.xlsx";
 	// 配置文件路径
-	private static ExcelContext revealContext = new ExcelContext("template/raveal-config.xml");
+	private static ExcelContext revealContext = new ExcelContext("/template/raveal-config.xml");
 	// Excel配置文件中配置的id
 	private static String revealExcelId = "reveal";
 
@@ -58,51 +58,6 @@ public class ImportRevealTest {
 	 */
 	@Test
 	public void Test() {
-		String revealDueTime = null;
-		String revealDueTimeSp = "2";
-		String noticeDueTime = "2";
-		String noticeDueTimeSp = null;
 
-		boolean flag = false;
-		if (StringUtils.isEmpty(revealDueTime)
-				&& StringUtils.isEmpty(revealDueTimeSp)) {
-			flag = true;
-		}
-		if (StringUtils.isEmpty(noticeDueTime)
-				&& StringUtils.isEmpty(noticeDueTimeSp)) {
-			flag = true;
-		}
-		if (StringUtils.isNotEmpty(revealDueTime)
-				&& StringUtils.isNotEmpty(revealDueTimeSp)) {
-			if (revealDueTime.equals(revealDueTimeSp)) {
-				flag = true;
-			} else {
-				flag = false;
-			}
-		} else if ((StringUtils.isNotEmpty(revealDueTime)
-				&& StringUtils.isEmpty(revealDueTimeSp))
-				||(StringUtils.isEmpty(revealDueTime)
-				&& StringUtils.isNotEmpty(revealDueTimeSp))) {
-			flag = false;
-		}
-		if (StringUtils.isNotEmpty(noticeDueTime)
-				&& StringUtils.isNotEmpty(noticeDueTimeSp)) {
-			if (noticeDueTime.equals(noticeDueTimeSp)) {
-				flag = true;
-			} else {
-				flag = false;
-			}
-		} else if ((StringUtils.isNotEmpty(noticeDueTime)
-				&& StringUtils.isEmpty(noticeDueTimeSp))
-				||(StringUtils.isEmpty(noticeDueTime)
-				&& StringUtils.isNotEmpty(noticeDueTimeSp))) {
-			flag = false;
-		}
-
-		if (flag) {
-			System.out.println("相同");
-		} else {
-			System.out.println("不相同");
-		}
 	}
 }
