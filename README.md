@@ -9,10 +9,31 @@
 ```
 
 
- **一、jar包依赖** 
+ **一、poi-jar包依赖** 
+```$xslt
+<poi.version>3.14</poi.version>
 
-![输入图片说明](http://git.oschina.net/uploads/images/2016/0619/175936_b9d561e5_690778.png "在这里输入图片标题")
-
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi</artifactId>
+    <version>${poi.version}</version>
+</dependency>
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi-ooxml</artifactId>
+    <version>${poi.version}</version>
+</dependency>
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi-ooxml-schemas</artifactId>
+    <version>${poi.version}</version>
+</dependency>
+<dependency>
+    <groupId>org.apache.xmlbeans</groupId>
+    <artifactId>xmlbeans</artifactId>
+    <version>${xmlbeans.version}</version>
+</dependency>
+```
 
  **二、如何使用？,参考** 
 
