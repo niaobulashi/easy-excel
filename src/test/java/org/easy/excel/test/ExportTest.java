@@ -27,10 +27,10 @@ import org.junit.Test;
  */
 public class ExportTest {
 	
-	//测试时文件磁盘路径
+	//测试时生成或读取的文件磁盘路径
 	private static String path = "src/test/resources/test-export-student.xlsx";
 	//配置文件路径
-	private static ExcelContext context = new ExcelContext("template/excel-config.xml");
+	private static ExcelContext context = new ExcelContext("/template/excel-config.xml");
 	//Excel配置文件中配置的id
 	private static String excelId = "student";
 
@@ -71,12 +71,12 @@ public class ExportTest {
 		OutputStream ops = new FileOutputStream(path);
 		ExcelExportResult exportResult = context.createExcelForPart(excelId,getStudents());
 		//假设这是第二次从数据库或其他平台查询到到数据
-		/*exportResult.append(getStudents());
+		exportResult.append(getStudents());
 		//第n次....
 		exportResult.append(getStudents());
 		exportResult.append(getStudents());
 		exportResult.append(getStudents());
-		exportResult.append(getStudents());*/
+		exportResult.append(getStudents());
 
 		Workbook workbook = exportResult.build();
 		workbook.write(ops);
