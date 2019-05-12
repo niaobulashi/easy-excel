@@ -18,8 +18,8 @@ public class ImportTest {
 	// 测试时文件磁盘路径
 	private static String path = "test-excel.xls";
 	// 配置文件路径
-	private static ExcelContext context = new ExcelContext("template/excel-config.xml");
-	private static ExcelContext revealContext = new ExcelContext("template/raveal-config.xml");
+	private static ExcelContext context = new ExcelContext("/template/excel-config.xml");
+	private static ExcelContext revealContext = new ExcelContext("/template/raveal-config.xml");
 	// Excel配置文件中配置的id
 	private static String excelId = "student";
 	private static String revealExcelId = "reveal";
