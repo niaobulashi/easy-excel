@@ -30,7 +30,7 @@ public class ExportRevealTest {
 	//测试时文件磁盘路径
 	private static String path = "src/test/resources/test-export-reveal.xlsx";
 	//配置文件路径
-	private static ExcelContext context = new ExcelContext("template/raveal-config.xml");
+	private static ExcelContext context = new ExcelContext("/template/raveal-config.xml");
 	//Excel配置文件中配置的id
 	private static String excelId = "reveal";
 
@@ -77,12 +77,12 @@ public class ExportRevealTest {
 		OutputStream ops = new FileOutputStream(path);
 		ExcelExportResult exportResult = context.createExcelForPart(excelId,getStudents());
 		//假设这是第二次从excelContext数据库或其他平台查询到到数据
-		/*exportResult.append(getStudents());
+		exportResult.append(getStudents());
 		//第n次....
 		exportResult.append(getStudents());
 		exportResult.append(getStudents());
 		exportResult.append(getStudents());
-		exportResult.append(getStudents());*/
+		exportResult.append(getStudents());
 
 		Workbook workbook = exportResult.build();
 		workbook.write(ops);
