@@ -18,7 +18,7 @@ import org.easy.excel.parsing.ExcelImport;
 import org.easy.excel.result.ExcelExportResult;
 import org.easy.excel.result.ExcelImportResult;
 import org.easy.excel.xml.XMLExcelDefinitionReader;
-import org.easy.util.ReflectUtil;
+import org.easy.excel.util.ReflectUtil;
 
 /**
  * Excel上下文支持,只需指定location配置文件路径,即可使用

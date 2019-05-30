@@ -8,7 +8,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.easy.excel.test.model.AuthorModel;
 import org.easy.excel.test.model.BookModel;
 import org.easy.excel.test.model.StudentModel;
-import org.easy.util.ReflectUtil;
+import org.easy.excel.util.ReflectUtil;
 import org.springframework.util.TypeUtils;
 
 /**

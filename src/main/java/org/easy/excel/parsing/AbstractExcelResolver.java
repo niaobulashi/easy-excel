@@ -16,8 +16,8 @@ import org.easy.excel.ExcelDefinitionReader;
 import org.easy.excel.config.FieldValue;
 import org.easy.excel.exception.ExcelException;
 import org.easy.excel.util.ExcelUtil;
-import org.easy.util.ReflectUtil;
-import org.easy.util.SpringUtil;
+import org.easy.excel.util.ReflectUtil;
+import org.easy.excel.util.SpringUtil;
 
 /**
  * Excel抽象解析器

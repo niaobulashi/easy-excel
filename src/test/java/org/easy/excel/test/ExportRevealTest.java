@@ -1,7 +1,5 @@
 package org.easy.excel.test;
 
-import com.sun.prism.paint.Color;
-import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.ss.usermodel.*;
 import org.easy.excel.ExcelContext;
 import org.easy.excel.config.ExcelDefinition;

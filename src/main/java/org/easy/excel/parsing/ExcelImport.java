@@ -16,7 +16,7 @@ import org.easy.excel.config.ExcelDefinition;
 import org.easy.excel.config.FieldValue;
 import org.easy.excel.exception.ExcelException;
 import org.easy.excel.result.ExcelImportResult;
-import org.easy.util.ReflectUtil;
+import org.easy.excel.util.ReflectUtil;
 /**
  * Excel导入实现类
  * @author lisuo

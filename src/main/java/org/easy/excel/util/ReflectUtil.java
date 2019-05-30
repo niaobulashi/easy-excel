@@ -1,4 +1,4 @@
-package org.easy.util;
+package org.easy.excel.util;
 
 
 import java.lang.reflect.Field;
