@@ -3,7 +3,7 @@
     <!-- excel标签参看:ExcelDefinition,Field标签参看:FieldValue -->
 
     <!-- 测试使用 ,学生类-->
-    <excel id="reveal" class="org.easy.excel.test.model.revealReportModel"
+    <excel id="reveal" class="com.niaobulashi.excel.test.model.revealReportModel"
            sheetname="期间管理报告披露频率信息配置表" enableStyle="true" defaultAlign="center" sheetIndex="0">
         <field name="id" title="序号" align="center" columnWidth="3000" uniformStyle="true"/>
         <field name="projectName" title="项目全称" align="left" columnWidth="13000" isNull="false" uniformStyle="true"/>

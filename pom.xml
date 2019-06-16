@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.easy</groupId>
+	<groupId>com.niaobulashi</groupId>
 	<artifactId>easy-excel</artifactId>
 	<version>1.0.RELEASE</version>
 	<!-- 版本定义 -->
@@ -13,6 +13,7 @@
 		<poi.version>3.14</poi.version>
 		<xmlbeans.version>2.6.0</xmlbeans.version>
 		<spring.version>4.2.6.RELEASE</spring.version>
+		<spring.code.version>[4.3.17,)</spring.code.version>
 		<log4j.version>1.2.17</log4j.version>
 	</properties>
 	<build>
@@ -103,7 +104,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>${spring.version}</version>
+			<version>${spring.code.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
