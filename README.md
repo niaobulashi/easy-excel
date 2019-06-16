@@ -115,3 +115,6 @@ public void testExportSimple()throws Exception{
 	workbook.close();
 }
 ```
+
+已解决项目打包成war或者jar之后，读取配置文件的问题
+
