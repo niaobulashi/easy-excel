@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Excel定义
  * 
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public class ExcelDefinition {

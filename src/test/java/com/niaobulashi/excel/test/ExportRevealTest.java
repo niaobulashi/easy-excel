@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * Excel导出测试,运行后刷新工程的src/test/resources目录
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public class ExportRevealTest {

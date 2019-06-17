@@ -16,7 +16,7 @@ import org.apache.poi.ss.util.NumberToTextConverter;
 
 /**
  * Excel 操作工具类
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public abstract class ExcelUtil {

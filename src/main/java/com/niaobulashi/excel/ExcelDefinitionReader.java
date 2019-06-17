@@ -6,7 +6,7 @@ import com.niaobulashi.excel.config.ExcelDefinition;
 
 /**
  * Excel定义接口
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public interface ExcelDefinitionReader {

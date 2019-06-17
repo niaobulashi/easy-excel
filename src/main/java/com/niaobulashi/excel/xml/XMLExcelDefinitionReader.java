@@ -29,7 +29,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * Excel XML定义读取注册
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public class XMLExcelDefinitionReader implements ExcelDefinitionReader {

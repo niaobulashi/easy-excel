@@ -2,7 +2,7 @@ package com.niaobulashi.excel.test.model;
 
 /**
  * 测试图书类
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public class BookModel {

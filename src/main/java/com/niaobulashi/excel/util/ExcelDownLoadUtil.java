@@ -13,7 +13,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  * Excel 下载工具类,提供原生的Servlet下载环境
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public class ExcelDownLoadUtil {

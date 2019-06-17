@@ -22,7 +22,7 @@ import com.niaobulashi.excel.util.SpringUtil;
 /**
  * Excel抽象解析器
  * 
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public abstract class AbstractExcelResolver implements CellValueConverter{

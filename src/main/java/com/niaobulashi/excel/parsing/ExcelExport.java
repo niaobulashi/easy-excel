@@ -23,7 +23,7 @@ import org.springframework.util.TypeUtils;
 
 /**
  * Excel导出实现类
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public class ExcelExport extends AbstractExcelResolver{

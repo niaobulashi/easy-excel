@@ -2,7 +2,7 @@ package com.niaobulashi.excel.parsing;
 
 /**
  * Excel 导入时产生的错误消息
- * @author lisuo
+ * @author niaobulashi
  */
 public class ExcelError {
 

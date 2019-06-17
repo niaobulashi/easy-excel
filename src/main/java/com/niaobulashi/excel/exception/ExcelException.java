@@ -2,7 +2,7 @@ package com.niaobulashi.excel.exception;
 
 /**
  * Excel异常
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public class ExcelException extends RuntimeException{

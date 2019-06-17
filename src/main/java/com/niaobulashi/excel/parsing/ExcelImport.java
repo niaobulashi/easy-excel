@@ -19,7 +19,7 @@ import com.niaobulashi.excel.result.ExcelImportResult;
 import com.niaobulashi.excel.util.ReflectUtil;
 /**
  * Excel导入实现类
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public class ExcelImport extends AbstractExcelResolver{

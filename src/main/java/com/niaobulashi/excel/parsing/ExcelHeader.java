@@ -8,7 +8,7 @@ import com.niaobulashi.excel.config.ExcelDefinition;
 
 /**
  * 导出Excel,标题之前的信息
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public interface ExcelHeader {

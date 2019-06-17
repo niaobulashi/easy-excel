@@ -5,7 +5,7 @@ import com.niaobulashi.excel.config.FieldValue;
 
 /**
  * CellValue转换器,用于解析cell值的规则
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public interface CellValueConverter {

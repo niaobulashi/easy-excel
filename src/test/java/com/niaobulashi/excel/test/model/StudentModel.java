@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * 测试学生类
  * 
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public class StudentModel {

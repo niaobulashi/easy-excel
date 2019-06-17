@@ -13,7 +13,7 @@ import org.springframework.util.TypeUtils;
 
 /**
  * 快速构建Excel配置,列多时敏捷开发使用
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public class ExcelXmlBuild {

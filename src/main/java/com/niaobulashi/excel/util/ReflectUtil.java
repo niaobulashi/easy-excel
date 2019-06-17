@@ -30,7 +30,7 @@ import org.springframework.util.TypeUtils;
 
 /**
  * 反射工具类
- * @author lisuo
+ * @author niaobulashi
  */
 public abstract class ReflectUtil {
 	

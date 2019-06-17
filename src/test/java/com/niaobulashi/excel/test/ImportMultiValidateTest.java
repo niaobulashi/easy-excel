@@ -12,7 +12,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 /**
  * Excel导入多行校验测试
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public class ImportMultiValidateTest {

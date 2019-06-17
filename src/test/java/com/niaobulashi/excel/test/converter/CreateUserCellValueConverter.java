@@ -7,7 +7,7 @@ import com.niaobulashi.excel.test.model.StudentModel;
 
 /**
  * 自定义转换,测试学生创建人
- * @author lisuo
+ * @author niaobulashi
  *
  */
 //@Component,与spring集成之后可以使用

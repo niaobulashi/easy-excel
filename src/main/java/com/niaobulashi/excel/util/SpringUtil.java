@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContextAware;
 
 /**
  * Spring工具类,用于静态获取Spring容器中的Bean
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public class SpringUtil implements ApplicationContextAware{

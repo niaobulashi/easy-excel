@@ -12,7 +12,7 @@ import com.niaobulashi.excel.exception.ExcelException;
 /**
  * Excel导出结果
  * 
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public class ExcelExportResult {

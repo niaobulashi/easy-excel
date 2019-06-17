@@ -6,7 +6,7 @@ import java.text.DecimalFormat;
 /**
  * Excel字段定义
  * 
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public class FieldValue {

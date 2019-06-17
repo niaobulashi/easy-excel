@@ -22,7 +22,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  * Excel上下文支持,只需指定location配置文件路径,即可使用
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public class ExcelContext  {

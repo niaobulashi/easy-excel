@@ -9,7 +9,7 @@ import org.apache.commons.collections.CollectionUtils;
 /**
  * Excel导入结果
  * 
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public class ExcelImportResult {

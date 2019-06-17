@@ -7,7 +7,7 @@ import org.springframework.core.io.ClassPathResource;
 
 /**
  * ExcelUtil 测试类
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public class ExcelUtiltTest {

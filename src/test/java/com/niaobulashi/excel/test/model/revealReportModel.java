@@ -3,7 +3,7 @@ package com.niaobulashi.excel.test.model;
 /**
  * 测试学生类
  * 
- * @author lisuo
+ * @author niaobulashi
  *
  */
 public class revealReportModel {
